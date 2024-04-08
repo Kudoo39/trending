@@ -16,19 +16,10 @@ Trending Shop is a web application built with React that provides users with an 
 
 To get started with the Trending Shop project, follow these steps:
 
-### For npm users
-
 1. Clone the repository: `git clone https://github.com/Kudoo39/trending-shop`
 2. Navigate to the project directory: `cd trending-shop`
-3. Install dependencies: `npm install`
-4. Run the app locally: `npm run start`
-
-### For yarn users
-
-1. Clone the repository: `git clone https://github.com/Kudoo39/trending-shop`
-2. Navigate to the project directory: `cd trending-shop`
-3. Install dependencies: `yarn install`
-4. Run the app locally: `yarn start`
+3. Install dependencies: `npm install` or `yarn install`
+4. Run the app locally: `npm run start` or `yarn start`
 
 ## Features
 
@@ -130,15 +121,8 @@ To get started with the Trending Shop project, follow these steps:
 
 ## Testing
 
-### For npm users
-
-1. Ensure all dependencies are installed: `npm install`
-2. Run the test suite: `npm run test`
-
-### For yarn users
-
-1. Ensure all dependencies are installed: `yarn install`
-2. Run the test suite: `yarn test`
+1. Ensure all dependencies are installed: `npm install` or `yarn install`
+2. Run the test suite: `npm run test` or `yarn test`
 
 ## Deployment
 
