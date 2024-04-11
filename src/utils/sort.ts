@@ -1,6 +1,6 @@
-import { ProductType } from '../misc/type'
+import { ProductRealType } from '../misc/type'
 
-export const sortByLowest = (originalArray: ProductType[], key: keyof ProductType) => {
+export const sortByLowest = (originalArray: ProductRealType[], key: keyof ProductRealType) => {
   if (!originalArray || !key) return []
 
   const clonedArray = [...originalArray]
@@ -11,7 +11,7 @@ export const sortByLowest = (originalArray: ProductType[], key: keyof ProductTyp
   return orderedArray
 }
 
-export const sortByHighest = (originalArray: ProductType[], key: keyof ProductType) => {
+export const sortByHighest = (originalArray: ProductRealType[], key: keyof ProductRealType) => {
   if (!originalArray || !key) return []
 
   const clonedArray = [...originalArray]

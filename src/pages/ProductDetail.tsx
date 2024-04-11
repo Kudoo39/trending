@@ -16,7 +16,7 @@ import defaultImage from '../assets/images/default_image.jpg'
 import DeleteProduct from '../components/product/DeleteProduct'
 import UpdateProduct from '../components/product/UpdateProduct'
 import ScrollUpButton from '../components/ScrollUpButton'
-import { ProductType } from '../misc/type'
+import { ProductRealType, ProductType } from '../misc/type'
 import { addToCart } from '../redux/slices/cartSlice'
 import { fetchSingleProductAsync } from '../redux/slices/productSlice'
 import { AppState, useAppDispatch } from '../redux/store'
@@ -46,7 +46,7 @@ const ProductDetail = () => {
     }
   }, [dispatch, navigate, user])
 
-  const handleAddToCart = debounce((product: ProductType) => {
+  const handleAddToCart = debounce((product: ProductRealType) => {
     cartDispatch(addToCart(product))
   }, 300)
 
@@ -66,7 +66,7 @@ const ProductDetail = () => {
     <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
       {product ? (
         <Card
-          key={product.id}
+          key={product._id}
           sx={{
             maxWidth: 500,
             width: '100%',
@@ -79,13 +79,13 @@ const ProductDetail = () => {
           <CardMedia
             component="img"
             alt="Product Images"
-            image={checkImage(cleanImage(product.images[0])) ? cleanImage(product.images[0]) : defaultImage}
+            image={checkImage(cleanImage(product.image)) ? cleanImage(product.image) : defaultImage}
             sx={{ maxHeight: 400, objectFit: 'cover', borderRadius: '8px 8px 0 0' }}
           />
 
           <Box sx={{ padding: 2 }}>
             <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
-              Product ID: {product.id}
+              Product ID: {product._id}
             </Typography>
             <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
               Product:{' '}
@@ -102,7 +102,7 @@ const ProductDetail = () => {
             <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
               Category:{' '}
               <Typography component="span" sx={{ fontWeight: 'normal' }}>
-                {product.category.name}
+                {product.categoryId.name}
               </Typography>
             </Typography>
             <Typography variant="body2" sx={{ fontWeight: 'bold', marginTop: 1 }}>

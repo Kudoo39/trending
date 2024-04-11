@@ -2,30 +2,34 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { toast } from 'react-toastify'
 import axios, { AxiosError } from 'axios'
 
-import { CreateProductType, ProductType, UpdateProductType } from '../../misc/type'
+import { CreateProductType, ProductRealType, ProductType, UpdateProductType } from '../../misc/type'
 
 const url = 'https://api.escuelajs.co/api/v1/products'
+const realUrl = 'http://localhost:8080/api/v1/products'
 const categoryUrl = 'https://api.escuelajs.co/api/v1/categories'
 
 type InitialState = {
-  allProducts: ProductType[]
-  products: ProductType[]
-  product: ProductType | null
+  products: ProductRealType[]
+  product: ProductRealType | null
   loading: boolean
   error: string | null
 }
 
 const initialState: InitialState = {
-  allProducts: [],
   products: [],
   product: null,
   loading: false,
   error: null
 }
 
+type RealUrlResponse = {
+  totalProducts: number
+  products: ProductRealType[]
+}
+
 export const fetchProductsAsync = createAsyncThunk('fetchProductsAsync', async () => {
   try {
-    const response = await axios.get<ProductType[]>(url)
+    const response = await axios.get<RealUrlResponse>(realUrl)
     return response.data
   } catch (e) {
     const error = e as AxiosError
@@ -35,7 +39,7 @@ export const fetchProductsAsync = createAsyncThunk('fetchProductsAsync', async (
 
 export const fetchSingleProductAsync = createAsyncThunk('fetchSingleProductAsync', async (id: number) => {
   try {
-    const response = await axios.get<ProductType>(`${url}/${id}`)
+    const response = await axios.get<ProductRealType>(`${realUrl}/${id}`)
     return response.data
   } catch (e) {
     const error = e as Error
@@ -47,7 +51,7 @@ export const fetchProductsPageAsync = createAsyncThunk(
   'fetchProductsPageAsync',
   async ({ offset, limit }: { offset: number; limit: number }) => {
     try {
-      const response = await axios.get<ProductType[]>(`${url}?offset=${offset}&limit=${limit}`)
+      const response = await axios.get<RealUrlResponse>(`${realUrl}?offset=${offset}&&limit=${limit}`)
       return response.data
     } catch (e) {
       const error = e as AxiosError
@@ -58,7 +62,7 @@ export const fetchProductsPageAsync = createAsyncThunk(
 
 export const fetchProductsCategoryAsync = createAsyncThunk('fetchProductsCategoryAsync', async (categoryId: number) => {
   try {
-    const response = await axios.get<ProductType[]>(`${categoryUrl}/${categoryId}/products`)
+    const response = await axios.get<RealUrlResponse>(`${realUrl}/category${categoryId}`)
     return response.data
   } catch (e) {
     const error = e as AxiosError
@@ -70,8 +74,8 @@ export const fetchProductsCategoryPageAsync = createAsyncThunk(
   'fetchProductsCategoryPageAsync',
   async ({ categoryId, offset, limit }: { categoryId: number; offset: number; limit: number }) => {
     try {
-      const response = await axios.get<ProductType[]>(
-        `${categoryUrl}/${categoryId}/products?offset=${offset}&limit=${limit}`
+      const response = await axios.get<RealUrlResponse>(
+        `${realUrl}/category/${categoryId}?offset=${offset}&&limit=${limit}`
       )
       return response.data
     } catch (e) {
@@ -130,7 +134,7 @@ const productSlice = createSlice({
       if (!(action.payload instanceof Error)) {
         return {
           ...state,
-          allProducts: action.payload,
+          products: action.payload.products,
           loading: false,
           error: null
         }
@@ -178,7 +182,7 @@ const productSlice = createSlice({
       if (!(action.payload instanceof Error)) {
         return {
           ...state,
-          products: action.payload,
+          products: action.payload.products,
           loading: false,
           error: null
         }
@@ -202,7 +206,7 @@ const productSlice = createSlice({
       if (!(action.payload instanceof Error)) {
         return {
           ...state,
-          allProducts: action.payload,
+          products: action.payload.products,
           loading: false,
           error: null
         }
@@ -226,7 +230,7 @@ const productSlice = createSlice({
       if (!(action.payload instanceof Error)) {
         return {
           ...state,
-          products: action.payload,
+          products: action.payload.products,
           loading: false,
           error: null
         }
@@ -269,7 +273,7 @@ const productSlice = createSlice({
     })
     // updateProductAsync
     builder.addCase(updateProductAsync.fulfilled, (state, action) => {
-      const findingProduct = state.products.findIndex(item => item.id === action.payload.id)
+      const findingProduct = state.products.findIndex(item => item._id === action.payload._id)
       if (findingProduct !== -1) {
         return {
           ...state,
@@ -297,7 +301,7 @@ const productSlice = createSlice({
     builder.addCase(deleteProductAsync.fulfilled, (state, action) => {
       return {
         ...state,
-        products: state.products.filter(product => product.id !== action.payload.id),
+        products: state.products.filter(product => product._id !== action.payload._id),
         loading: false,
         error: null
       }

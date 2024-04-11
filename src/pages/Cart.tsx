@@ -22,16 +22,16 @@ const Cart = () => {
 
   const totalPrice = cartItems.reduce((total, currentItem) => total + currentItem.price * currentItem.quantity, 0)
 
-  const handleRemove = (id: number) => {
-    dispatch(removeFromCart(id))
+  const handleRemove = (_id: string) => {
+    dispatch(removeFromCart(_id))
   }
 
-  const handleIncrease = (id: number) => {
-    dispatch(updateQuantity({ id, quantity: 1 }))
+  const handleIncrease = (_id: string) => {
+    dispatch(updateQuantity({ _id, quantity: 1 }))
   }
 
-  const handleDecrease = (id: number) => {
-    dispatch(updateQuantity({ id, quantity: -1 }))
+  const handleDecrease = (_id: string) => {
+    dispatch(updateQuantity({ _id, quantity: -1 }))
   }
 
   const handleCheckout = () => {
@@ -56,7 +56,7 @@ const Cart = () => {
       <Box>
         {cartItems.map(cart => (
           <Box
-            key={cart.id}
+            key={cart._id}
             sx={{
               display: 'flex',
               alignItems: 'center',
@@ -69,7 +69,7 @@ const Cart = () => {
               <CardMedia
                 component="img"
                 alt="Product Images"
-                image={checkImage(cleanImage(cart.images[0])) ? cleanImage(cart.images[0]) : defaultImage}
+                image={checkImage(cleanImage(cart.image)) ? cleanImage(cart.image) : defaultImage}
                 sx={{ width: '75px', height: '75px', borderRadius: '8px' }}
               />
             </Box>
@@ -89,7 +89,7 @@ const Cart = () => {
               <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
                 ID:{' '}
                 <Typography component="span" sx={{ fontWeight: 'normal' }}>
-                  {cart.id}
+                  {cart._id}
                 </Typography>
               </Typography>
             </Box>
@@ -105,16 +105,16 @@ const Cart = () => {
               }}
             >
               <Box sx={{ display: 'flex', alignItems: 'center', fontSize: '16px' }}>
-                <IconButton onClick={() => handleDecrease(cart.id)} disabled={cart.quantity === 1}>
+                <IconButton onClick={() => handleDecrease(cart._id)} disabled={cart.quantity === 1}>
                   <RemoveIcon />
                 </IconButton>
                 {cart.quantity}
-                <IconButton onClick={() => handleIncrease(cart.id)}>
+                <IconButton onClick={() => handleIncrease(cart._id)}>
                   <AddIcon />
                 </IconButton>
               </Box>
             </Typography>
-            <IconButton onClick={() => handleRemove(cart.id)} sx={{ marginLeft: 'auto' }}>
+            <IconButton onClick={() => handleRemove(cart._id)} sx={{ marginLeft: 'auto' }}>
               <DeleteOutlineIcon sx={{ '&:hover': { color: 'red' } }} />
             </IconButton>
           </Box>
