@@ -36,12 +36,32 @@ export type ProductType = {
   images: string[]
 }
 
+export type RealCategory = {
+  _id: string
+  name: string
+  image: string
+}
+
+export type ProductRealType = {
+  _id: string
+  title: string
+  price: number
+  description: string
+  size: string
+  categoryId: RealCategory
+  image: string
+}
+
 export type CartType = ProductType & {
   quantity: number
 }
 
+export type CartRealType = ProductRealType & {
+  quantity: number
+}
+
 export type UpdateQuantity = {
-  id: number
+  _id: string
   quantity: number
 }
 

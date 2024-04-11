@@ -17,7 +17,7 @@ import Categories from '../components/Categories'
 import ScrollUpButton from '../components/ScrollUpButton'
 import SortPrice from '../components/SortPrice'
 import CreateProduct from '../components/product/CreateProduct'
-import { Sort, ProductType } from '../misc/type'
+import { Sort, ProductType, ProductRealType } from '../misc/type'
 import { addToCart } from '../redux/slices/cartSlice'
 import {
   fetchProductsAsync,
@@ -37,7 +37,6 @@ const Products = () => {
   const productsPerPage = 8
 
   const user = useSelector((state: AppState) => state.users.user)
-  const allProducts = useSelector((state: AppState) => state.products.allProducts)
   const products = useSelector((state: AppState) => state.products.products)
   const selectedCategory = useSelector((state: AppState) => state.categories.selectedCategory)
   const loading = useSelector((state: AppState) => state.products.loading)
@@ -47,10 +46,10 @@ const Products = () => {
 
   const offset = (page - 1) * productsPerPage
   const limit = productsPerPage
-  let numberOfPages = Math.ceil(allProducts.length >= 0 ? allProducts.length / productsPerPage : 0)
+  let numberOfPages = Math.ceil(products.length >= 0 ? products.length / productsPerPage : 0)
   numberOfPages = numberOfPages === 0 ? 1 : numberOfPages
 
-  const handleAddToCart = debounce((product: ProductType) => {
+  const handleAddToCart = debounce((product: ProductRealType) => {
     cartDispatch(addToCart(product))
   }, 300)
 
@@ -73,7 +72,7 @@ const Products = () => {
     } else {
       dispatch(fetchProductsCategoryPageAsync({ categoryId: selectedCategory, offset, limit }))
     }
-  }, [dispatch, selectedCategory, offset, limit, allProducts.length])
+  }, [dispatch, selectedCategory, offset, limit, products.length])
 
   useEffect(() => {
     const accessToken = localStorage.getItem('access_token')
@@ -126,7 +125,7 @@ const Products = () => {
           >
             {sortProducts.map(product => (
               <Card
-                key={product.id}
+                key={product._id}
                 sx={{
                   'border': '1px solid #ddd',
                   'borderRadius': '8px',
@@ -142,7 +141,7 @@ const Products = () => {
                   <CardMedia
                     component="img"
                     alt={product.title}
-                    image={checkImage(cleanImage(product.images[0])) ? cleanImage(product.images[0]) : defaultImage}
+                    image={checkImage(cleanImage(product.image)) ? cleanImage(product.image) : defaultImage}
                     sx={{ height: 300, objectFit: 'cover' }}
                   />
                   <CardContent>
@@ -170,7 +169,7 @@ const Products = () => {
                     color="primary"
                     variant="outlined"
                     component={RouterLink}
-                    to={`/products/${product.id}`}
+                    to={`/products/${product._id}`}
                     sx={{ fontWeight: 'bold', padding: 1 }}
                   >
                     More detail
