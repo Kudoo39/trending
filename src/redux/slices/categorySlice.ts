@@ -1,26 +1,28 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { Category } from '../../misc/type'
+import { Category, RealCategory } from '../../misc/type'
 import axios, { AxiosError } from 'axios'
 
 const url = 'https://api.escuelajs.co/api/v1/categories'
+const realUrl = 'http://localhost:8080/api/v1/categories'
 
 type InitialState = {
-  categories: Category[]
-  selectedCategory: number
+  categories: RealCategory[]
+  selectedCategory: string
   loading: boolean
   error: string | null
 }
 
 const initialState: InitialState = {
   categories: [],
-  selectedCategory: 0,
+  selectedCategory: '661554901973ad63139c85fc',
   loading: false,
   error: null
 }
 
 export const fetchCategoriesAsync = createAsyncThunk('fetchCategoriesAsync', async () => {
   try {
-    const response = await axios.get<Category[]>(url)
+    const response = await axios.get<RealCategory[]>(realUrl)
+    console.log(response.data)
     return response.data
   } catch (e) {
     const error = e as AxiosError
@@ -32,7 +34,7 @@ const categorySlice = createSlice({
   name: 'category',
   initialState,
   reducers: {
-    setSelectedCategory(state, action: PayloadAction<number>) {
+    setSelectedCategory(state, action: PayloadAction<string>) {
       state.selectedCategory = action.payload
     }
   },
@@ -40,7 +42,7 @@ const categorySlice = createSlice({
     // fetchCategoriesAsync
     builder.addCase(fetchCategoriesAsync.fulfilled, (state, action) => {
       if (!(action.payload instanceof Error)) {
-        state.categories = [{ id: 0, name: 'All', image: 'https://i.imgur.com/cLBhSOG.png' }, ...action.payload]
+        state.categories = action.payload
       }
       state.loading = false,
       state.error = null
