@@ -20,6 +20,14 @@ export type CreateProductType = {
   images: string[]
 }
 
+export type CreateRealProductType = {
+  title: string
+  price: number | null
+  description: string
+  categoryId: string
+  image: string
+}
+
 export type UpdateProductType = {
   title?: string
   price?: number

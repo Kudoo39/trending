@@ -15,11 +15,11 @@ import MenuItem from '@mui/material/MenuItem'
 import FormHelperText from '@mui/material/FormHelperText'
 import { createProductsAsync, fetchProductsAsync } from '../../redux/slices/productSlice'
 import { AppState, useAppDispatch } from '../../redux/store'
-import { CreateProductType } from '../../misc/type'
+import { CreateProductType, CreateRealProductType } from '../../misc/type'
 
 const CreateProduct = () => {
   const categories = useSelector((state: AppState) => state.categories.categories)
-  const categoryId = categories.length > 0 ? categories[1].id : 1
+  const categoryId = categories.length > 0 ? categories[1]._id : '661554aa1973ad63139c8602'
   const dispatch = useAppDispatch()
   const [openModal, setOpenModal] = useState(false)
 
@@ -29,21 +29,21 @@ const CreateProduct = () => {
       price: null,
       description: '',
       categoryId: categoryId,
-      images: ['']
+      image: ''
     },
     validationSchema: Yup.object({
       title: Yup.string().required('Required'),
       price: Yup.number().positive('Price must be a positive number').required('Required'),
       description: Yup.string().required('Required'),
       categoryId: Yup.string().required('Required'),
-      images: Yup.string().required('Required')
+      image: Yup.string().required('Required')
     }),
-    onSubmit: async (data: CreateProductType, { resetForm }) => {
-      const imagesArray = typeof data.images === 'string' ? [data.images] : data.images
-      const modifiedData = { ...data, images: imagesArray }
+    onSubmit: async (data: CreateRealProductType, { resetForm }) => {
+      // const imagesArray = typeof data.image === 'string' ? [data.images] : data.images
+      // const modifiedData = { ...data, images: imagesArray }
 
       try {
-        await dispatch(createProductsAsync(modifiedData))
+        await dispatch(createProductsAsync(data))
         await dispatch(fetchProductsAsync())
       } catch (error) {
         return error
@@ -141,7 +141,7 @@ const CreateProduct = () => {
               sx={{ marginTop: 2, width: '300px' }}
             >
               {categories.slice(1).map(category => (
-                <MenuItem key={category.id} value={category.id}>
+                <MenuItem key={category._id} value={category._id}>
                   {category.name}
                 </MenuItem>
               ))}
@@ -151,17 +151,17 @@ const CreateProduct = () => {
             )}
 
             <TextField
-              id="images"
-              name="images"
+              id="image"
+              name="image"
               label="The Product URL"
               type="text"
-              value={[formik.values.images]}
+              value={formik.values.image}
               onChange={formik.handleChange}
               placeholder="Enter your photo url"
               variant="outlined"
               margin="normal"
-              error={formik.touched.images && Boolean(formik.errors.images)}
-              helperText={formik.touched.images && formik.errors.images}
+              error={formik.touched.image && Boolean(formik.errors.image)}
+              helperText={formik.touched.image && formik.errors.image}
               sx={{ marginTop: 3, width: '300px' }}
             />
 

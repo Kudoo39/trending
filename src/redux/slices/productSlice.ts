@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { toast } from 'react-toastify'
 import axios, { AxiosError } from 'axios'
 
-import { CreateProductType, ProductRealType, ProductType, UpdateProductType } from '../../misc/type'
+import { CreateProductType, CreateRealProductType, ProductRealType, ProductType, UpdateProductType } from '../../misc/type'
 
 const url = 'https://api.escuelajs.co/api/v1/products'
 const realUrl = 'http://localhost:8080/api/v1/products'
@@ -60,9 +60,10 @@ export const fetchProductsPageAsync = createAsyncThunk(
   }
 )
 
-export const fetchProductsCategoryAsync = createAsyncThunk('fetchProductsCategoryAsync', async (categoryId: number) => {
+export const fetchProductsCategoryAsync = createAsyncThunk('fetchProductsCategoryAsync', async (categoryId: string) => {
   try {
-    const response = await axios.get<RealUrlResponse>(`${realUrl}/category${categoryId}`)
+    console.log(categoryId, 'this is categoryId')
+    const response = await axios.get<RealUrlResponse>(`${realUrl}/category/${categoryId}`)
     return response.data
   } catch (e) {
     const error = e as AxiosError
@@ -72,7 +73,7 @@ export const fetchProductsCategoryAsync = createAsyncThunk('fetchProductsCategor
 
 export const fetchProductsCategoryPageAsync = createAsyncThunk(
   'fetchProductsCategoryPageAsync',
-  async ({ categoryId, offset, limit }: { categoryId: number; offset: number; limit: number }) => {
+  async ({ categoryId, offset, limit }: { categoryId: string; offset: number; limit: number }) => {
     try {
       const response = await axios.get<RealUrlResponse>(
         `${realUrl}/category/${categoryId}?offset=${offset}&&limit=${limit}`
@@ -85,9 +86,9 @@ export const fetchProductsCategoryPageAsync = createAsyncThunk(
   }
 )
 
-export const createProductsAsync = createAsyncThunk('createProductsAsync', async (newProduct: CreateProductType) => {
+export const createProductsAsync = createAsyncThunk('createProductsAsync', async (newProduct: CreateRealProductType) => {
   try {
-    const response = await axios.post(url, newProduct)
+    const response = await axios.post(realUrl, newProduct)
     toast.success('Product added successfully!', { position: 'bottom-left' })
     return response.data
   } catch (e) {

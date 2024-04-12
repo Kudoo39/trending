@@ -30,7 +30,7 @@ const Categories = () => {
   const categoryDispatch = useDispatch()
 
   const handleCategory = useCallback(
-    (category: number) => {
+    (category: string) => {
       categoryDispatch(setSelectedCategory(category))
     },
     [categoryDispatch]
@@ -55,16 +55,16 @@ const Categories = () => {
   if (matches) {
     return (
       <FormControl fullWidth sx={{ marginTop: 2 }}>
-        <InputLabel id="demo-simple-select-label">Caterogy</InputLabel>
+        <InputLabel id="demo-simple-select-label">Category</InputLabel>
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
           value={selectedCategory}
           label="Category"
-          onChange={(event: SelectChangeEvent<number>) => handleCategory(event.target.value as number)}
+          onChange={(event: SelectChangeEvent<string>) => handleCategory(event.target.value as string)}
         >
           {categories.map(category => (
-            <MenuItem key={category.id} value={category.id}>
+            <MenuItem key={category._id} value={category._id}>
               {category.name}
             </MenuItem>
           ))}
@@ -90,10 +90,10 @@ const Categories = () => {
         }}
       >
         {categories.map(category => (
-          <ListItem key={category.id} disablePadding onClick={() => handleCategory(category.id)}>
+          <ListItem key={category._id} disablePadding onClick={() => handleCategory(category._id)}>
             <ListItemButton>
               <ListItemText primary={category.name} />
-              {selectedCategory === category.id ? <CheckIcon /> : null}
+              {selectedCategory === category._id ? <CheckIcon /> : null}
             </ListItemButton>
           </ListItem>
         ))}

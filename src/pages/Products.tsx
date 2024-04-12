@@ -58,16 +58,17 @@ const Products = () => {
   }
 
   useEffect(() => {
-    if (selectedCategory === 0) {
+    if (selectedCategory === '661554901973ad63139c85fc') {
       dispatch(fetchProductsAsync())
     } else {
+      console.log(selectedCategory, 'THISSISIS SELECTED CATE')
       dispatch(fetchProductsCategoryAsync(selectedCategory))
       setPage(1)
     }
   }, [dispatch, selectedCategory])
 
   useEffect(() => {
-    if (selectedCategory === 0) {
+    if (selectedCategory === '661554901973ad63139c85fc') {
       dispatch(fetchProductsPageAsync({ offset, limit }))
     } else {
       dispatch(fetchProductsCategoryPageAsync({ categoryId: selectedCategory, offset, limit }))
