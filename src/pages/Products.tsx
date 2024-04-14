@@ -38,6 +38,7 @@ const Products = () => {
 
   const user = useSelector((state: AppState) => state.users.user)
   const products = useSelector((state: AppState) => state.products.products)
+  const total = useSelector((state: AppState) => state.products.total)
   const selectedCategory = useSelector((state: AppState) => state.categories.selectedCategory)
   const loading = useSelector((state: AppState) => state.products.loading)
   const error = useSelector((state: AppState) => state.products.error)
@@ -46,7 +47,7 @@ const Products = () => {
 
   const offset = (page - 1) * productsPerPage
   const limit = productsPerPage
-  let numberOfPages = Math.ceil(products.length >= 0 ? products.length / productsPerPage : 0)
+  let numberOfPages = Math.ceil(total >= 0 ? total / productsPerPage : 0)
   numberOfPages = numberOfPages === 0 ? 1 : numberOfPages
 
   const handleAddToCart = debounce((product: ProductRealType) => {
@@ -61,7 +62,6 @@ const Products = () => {
     if (selectedCategory === '661554901973ad63139c85fc') {
       dispatch(fetchProductsAsync())
     } else {
-      console.log(selectedCategory, 'THISSISIS SELECTED CATE')
       dispatch(fetchProductsCategoryAsync(selectedCategory))
       setPage(1)
     }
@@ -86,8 +86,8 @@ const Products = () => {
     selectedSort === 'Default'
       ? products
       : selectedSort === 'Highest Price'
-        ? sortByHighest(products, 'price') // prettier-ignore
-        : sortByLowest(products, 'price') // prettier-ignore
+        ? sortByHighest(products, 'price')
+        : sortByLowest(products, 'price')
 
   if (loading) {
     return (

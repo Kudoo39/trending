@@ -22,7 +22,6 @@ const initialState: InitialState = {
 export const fetchCategoriesAsync = createAsyncThunk('fetchCategoriesAsync', async () => {
   try {
     const response = await axios.get<RealCategory[]>(realUrl)
-    console.log(response.data)
     return response.data
   } catch (e) {
     const error = e as AxiosError

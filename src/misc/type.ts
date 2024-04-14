@@ -83,6 +83,17 @@ export type UserRegister = UserCredential & {
   avatar: string
 }
 
+export type RealUserRegister = UserCredential & {
+  firstname: string
+  lastname: string
+  avatar: string
+}
+
+export type RealUser = RealUserRegister & {
+  role: 'customer' | 'admin'
+  _id: string
+}
+
 export type User = UserRegister & {
   role: 'customer' | 'admin'
   id: number
