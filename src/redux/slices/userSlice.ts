@@ -2,10 +2,14 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios, { AxiosError } from 'axios'
 import { toast } from 'react-toastify'
 
-import { User, UserCredential, UserRegister } from '../../misc/type'
+import { RealUserRegister, User, UserCredential, UserRegister } from '../../misc/type'
 
 const userUrl = 'https://api.escuelajs.co/api/v1/users'
+const realUserUrl = 'http://localhost:8080/api/v1/users'
+
 const loginUrl = 'https://api.escuelajs.co/api/v1/auth/login'
+const realLoginUrl = 'http://localhost:8080/api/v1/users/login'
+
 const profileUrl = 'https://api.escuelajs.co/api/v1/auth/profile'
 
 const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true'
@@ -25,9 +29,9 @@ const initialState: InitialState = {
   isAuthenticated: isAuthenticated
 }
 
-export const registerUserAsync = createAsyncThunk('registerUserAsync', async (userData: UserRegister) => {
+export const registerUserAsync = createAsyncThunk('registerUserAsync', async (userData: RealUserRegister) => {
   try {
-    const response = await axios.post(userUrl, userData)
+    const response = await axios.post(realUserUrl, userData)
     toast.success('Account created successfully!', { position: 'bottom-left' })
     return response.data
   } catch (e) {

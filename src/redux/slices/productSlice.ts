@@ -10,6 +10,7 @@ const categoryUrl = 'https://api.escuelajs.co/api/v1/categories'
 
 type InitialState = {
   products: ProductRealType[]
+  total: number
   product: ProductRealType | null
   loading: boolean
   error: string | null
@@ -17,13 +18,14 @@ type InitialState = {
 
 const initialState: InitialState = {
   products: [],
+  total: 0,
   product: null,
   loading: false,
   error: null
 }
 
 type RealUrlResponse = {
-  totalProducts: number
+  totalProduct: number
   products: ProductRealType[]
 }
 
@@ -62,7 +64,6 @@ export const fetchProductsPageAsync = createAsyncThunk(
 
 export const fetchProductsCategoryAsync = createAsyncThunk('fetchProductsCategoryAsync', async (categoryId: string) => {
   try {
-    console.log(categoryId, 'this is categoryId')
     const response = await axios.get<RealUrlResponse>(`${realUrl}/category/${categoryId}`)
     return response.data
   } catch (e) {
@@ -136,6 +137,7 @@ const productSlice = createSlice({
         return {
           ...state,
           products: action.payload.products,
+          total: action.payload.totalProduct,
           loading: false,
           error: null
         }
@@ -208,6 +210,7 @@ const productSlice = createSlice({
         return {
           ...state,
           products: action.payload.products,
+          total: action.payload.totalProduct,
           loading: false,
           error: null
         }

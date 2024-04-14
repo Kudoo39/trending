@@ -18,20 +18,22 @@ const Register = () => {
   const formik = useFormik({
     initialValues: {
       email: '',
-      name: '',
+      firstname: '',
+      lastname: '',
       password: '',
       confirmedPassword: '',
       avatar:
         'https://images.unsplash.com/photo-1554080353-a576cf803bda?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8cGhvdG98ZW58MHx8MHx8fDA%3D'
     },
     validationSchema: Yup.object({
-      name: Yup.string().required('Required').min(4, 'Must be 4 or more characters'),
+      firstname: Yup.string().required('Required').min(3, 'Must be 3 or more characters'),
+      lastname: Yup.string().required('Required').min(1, 'Must be 1 or more characters'),
       email: Yup.string()
         .required('Required')
         .matches(/^[\w-]+(\.[\w-]+)*@([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$/, 'Please enter a valid email address'),
       password: Yup.string()
         .required('Required')
-        .matches(/^.{6,}$/, 'Password must be at least 6 characters'),
+        .matches(/^.{3,}$/, 'Password must be at least 3 characters'),
       confirmedPassword: Yup.string()
         .required('Required')
         .oneOf([Yup.ref('password')], 'Password must match'),
@@ -61,17 +63,32 @@ const Register = () => {
         sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
       >
         <TextField
-          id="name"
-          name="name"
-          label="Your name"
+          id="firstname"
+          name="firstname"
+          label="Your first name"
           type="text"
-          value={formik.values.name}
+          value={formik.values.firstname}
           onChange={formik.handleChange}
-          placeholder="Enter your name"
+          placeholder="Enter your first name"
           variant="outlined"
           margin="normal"
-          error={formik.touched.name && Boolean(formik.errors.name)}
-          helperText={formik.touched.name && formik.errors.name}
+          error={formik.touched.firstname && Boolean(formik.errors.firstname)}
+          helperText={formik.touched.firstname && formik.errors.firstname}
+          sx={{ marginBottom: 1, width: '300px' }}
+        />
+
+        <TextField
+          id="lastname"
+          name="lastname"
+          label="Your last name"
+          type="text"
+          value={formik.values.lastname}
+          onChange={formik.handleChange}
+          placeholder="Enter your last name"
+          variant="outlined"
+          margin="normal"
+          error={formik.touched.lastname && Boolean(formik.errors.lastname)}
+          helperText={formik.touched.lastname && formik.errors.lastname}
           sx={{ marginBottom: 1, width: '300px' }}
         />
 
