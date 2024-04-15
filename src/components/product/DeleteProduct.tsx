@@ -19,14 +19,14 @@ const DeleteProduct = () => {
   const error = useSelector((state: AppState) => state.products.error)
   const dispatch = useAppDispatch()
   const [openModal, setOpenModal] = useState(false)
-  const { id } = useParams()
+  const { _id } = useParams()
 
   const formik = useFormik({
     initialValues: {},
     onSubmit: async () => {
       try {
         navigate('/products')
-        await dispatch(deleteProductAsync(Number(id)))
+        await dispatch(deleteProductAsync(String(_id)))
         await dispatch(fetchProductsAsync())
       } catch (error) {
         return error

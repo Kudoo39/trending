@@ -32,7 +32,7 @@ const Login = () => {
         .matches(/^[\w-]+(\.[\w-]+)*@([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$/, 'Please enter a valid email address'),
       password: Yup.string()
         .required('Required')
-        .matches(/^.{6,}$/, 'Password must be at least 6 characters')
+        .matches(/^.{3,}$/, 'Password must be at least 3 characters')
     }),
     onSubmit: (userCredential: UserCredential) => {
       dispatch(loginUserAsync(userCredential))

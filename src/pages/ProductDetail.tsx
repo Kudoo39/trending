@@ -30,17 +30,17 @@ const ProductDetail = () => {
   const loading = useSelector((state: AppState) => state.products.loading)
   const error = useSelector((state: AppState) => state.products.error)
 
-  const { id } = useParams()
+  const { _id } = useParams()
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const cartDispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(fetchSingleProductAsync(Number(id)))
-  }, [dispatch, id])
+    dispatch(fetchSingleProductAsync(String(_id)))
+  }, [dispatch, _id])
 
   useEffect(() => {
-    const accessToken = localStorage.getItem('access_token')
+    const accessToken = localStorage.getItem('token')
     if (accessToken && !user) {
       dispatch(authenticateUserAsync(accessToken))
     }
