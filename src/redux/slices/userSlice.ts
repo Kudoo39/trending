@@ -11,6 +11,7 @@ const loginUrl = 'https://api.escuelajs.co/api/v1/auth/login'
 const realLoginUrl = 'http://localhost:8080/api/v1/users/login'
 
 const profileUrl = 'https://api.escuelajs.co/api/v1/auth/profile'
+const realProfileUrl = 'http://localhost:8080/api/v1/users/profile'
 
 const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true'
 
@@ -41,11 +42,11 @@ export const registerUserAsync = createAsyncThunk('registerUserAsync', async (us
   }
 })
 
-export const authenticateUserAsync = createAsyncThunk('authenticateUserAsync', async (access_token: string) => {
+export const authenticateUserAsync = createAsyncThunk('authenticateUserAsync', async (token: string) => {
   try {
-    const authentication = await axios.get(profileUrl, {
+    const authentication = await axios.get(realProfileUrl, {
       headers: {
-        Authorization: `Bearer ${access_token}`
+        Authorization: `Bearer ${token}`
       }
     })
     return authentication.data
@@ -59,12 +60,12 @@ export const loginUserAsync = createAsyncThunk(
   'loginUserAsync',
   async (userCredential: UserCredential, { dispatch }) => {
     try {
-      const response = await axios.post<{ access_token: string }>(loginUrl, userCredential)
+      const response = await axios.post<{ token: string }>(realLoginUrl, userCredential)
       toast.success('Login successfully!', { position: 'bottom-left' })
       localStorage.setItem('isAuthenticated', 'true')
-      localStorage.setItem('access_token', response.data.access_token)
+      localStorage.setItem('token', response.data.token)
 
-      const authentication = await dispatch(authenticateUserAsync(response.data.access_token))
+      const authentication = await dispatch(authenticateUserAsync(response.data.token))
       return authentication.payload as User
     } catch (e) {
       const error = e as Error
@@ -81,7 +82,7 @@ const userSlice = createSlice({
     logout(state) {
       state.user = null
       state.isAuthenticated = false
-      localStorage.removeItem('access_token')
+      localStorage.removeItem('token')
       localStorage.removeItem('isAuthenticated')
       toast.success('Logout successfully!', { position: 'bottom-left' })
     }

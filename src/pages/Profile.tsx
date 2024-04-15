@@ -22,7 +22,7 @@ const Profile = () => {
   }
 
   useEffect(() => {
-    const accessToken = localStorage.getItem('access_token')
+    const accessToken = localStorage.getItem('token')
     if (accessToken && !user) {
       dispatch(authenticateUserAsync(accessToken))
     } else if (!accessToken) {

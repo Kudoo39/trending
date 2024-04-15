@@ -22,7 +22,7 @@ const UpdateProduct = () => {
   const dispatch = useAppDispatch()
   const [openModal, setOpenModal] = useState(false)
   const product = useSelector((state: AppState) => state.products.product)
-  const { id } = useParams()
+  const { _id } = useParams()
 
   const formik = useFormik({
     initialValues: {
@@ -38,11 +38,11 @@ const UpdateProduct = () => {
     onSubmit: async (data: UpdateProductType, { resetForm }) => {
       const modifiedData = {
         updateProduct: data,
-        productId: Number(id)
+        productId: String(_id)
       }
       try {
         await dispatch(updateProductAsync(modifiedData))
-        await dispatch(fetchSingleProductAsync(Number(id)))
+        await dispatch(fetchSingleProductAsync(String(_id)))
       } catch (error) {
         return error
       }
@@ -108,7 +108,7 @@ const UpdateProduct = () => {
               name="id"
               label="Product ID"
               type="text"
-              value={id}
+              value={_id}
               disabled
               variant="outlined"
               margin="normal"

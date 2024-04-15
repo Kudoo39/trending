@@ -1,9 +1,12 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { toast } from 'react-toastify'
 
 import { CartRealType, CartType, ProductRealType, ProductType, UpdateQuantity } from '../../misc/type'
+import axios, { AxiosError } from 'axios'
 
 const cart = JSON.parse(localStorage.getItem('cart') || '[]')
+
+const url = 'http://localhost:8080/api/v1/orders'
 
 type InitialState = {
   cart: CartRealType[]
@@ -12,6 +15,18 @@ type InitialState = {
 const initialState: InitialState = {
   cart: cart
 }
+
+export const addOrderByUserId = createAsyncThunk('addOrderByUserId', async (userId: string) => {
+  try {
+    const response = await axios.post(url, userId)
+    toast.success('Order added successfully!', { position: 'bottom-left' })
+    return response.data
+  } catch (e) {
+    const error = e as AxiosError
+    toast.error('Order added failed :/', { position: 'bottom-left' })
+    return error
+  }
+})
 
 const cartSlice = createSlice({
   name: 'cart',
@@ -49,6 +64,28 @@ const cartSlice = createSlice({
       state.cart = []
       localStorage.setItem('cart', JSON.stringify(state.cart))
     }
+  },
+  extraReducers(builder) {
+    builder.addCase(addOrderByUserId.fulfilled, (state, action) => {
+      return {
+        ...state,
+        user: action.payload,
+        loading: false
+      }
+    })
+    builder.addCase(addOrderByUserId.pending, state => {
+      return {
+        ...state,
+        loading: true
+      }
+    })
+    builder.addCase(addOrderByUserId.rejected, (state, action) => {
+      return {
+        ...state,
+        loading: false,
+        error: action.error.message ?? 'error'
+      }
+    })
   }
 })
 

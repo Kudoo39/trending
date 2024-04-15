@@ -39,9 +39,9 @@ export const fetchProductsAsync = createAsyncThunk('fetchProductsAsync', async (
   }
 })
 
-export const fetchSingleProductAsync = createAsyncThunk('fetchSingleProductAsync', async (id: number) => {
+export const fetchSingleProductAsync = createAsyncThunk('fetchSingleProductAsync', async (_id: string) => {
   try {
-    const response = await axios.get<ProductRealType>(`${realUrl}/${id}`)
+    const response = await axios.get<ProductRealType>(`${realUrl}/${_id}`)
     return response.data
   } catch (e) {
     const error = e as Error
@@ -101,7 +101,7 @@ export const createProductsAsync = createAsyncThunk('createProductsAsync', async
 
 export const updateProductAsync = createAsyncThunk(
   'updateProductAsync',
-  async ({ updateProduct, productId }: { updateProduct: UpdateProductType; productId: number }) => {
+  async ({ updateProduct, productId }: { updateProduct: UpdateProductType; productId: string }) => {
     try {
       const response = await axios.put(`${url}/${productId}`, updateProduct)
       toast.success('Product updated successfully!', { position: 'bottom-left' })
@@ -114,7 +114,7 @@ export const updateProductAsync = createAsyncThunk(
   }
 )
 
-export const deleteProductAsync = createAsyncThunk('deleteProductAsync', async (productId: number) => {
+export const deleteProductAsync = createAsyncThunk('deleteProductAsync', async (productId: string) => {
   try {
     const response = await axios.delete(`${url}/${productId}`)
     toast.success('Product removed successfully!', { position: 'bottom-left' })
