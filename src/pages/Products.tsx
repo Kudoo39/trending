@@ -18,7 +18,7 @@ import ScrollUpButton from '../components/ScrollUpButton'
 import SortPrice from '../components/SortPrice'
 import CreateProduct from '../components/product/CreateProduct'
 import { Sort, ProductType, ProductRealType } from '../misc/type'
-import { addToCart } from '../redux/slices/cartSlice'
+import { addOrderByUserId, addToCart } from '../redux/slices/cartSlice'
 import {
   fetchProductsAsync,
   fetchProductsCategoryAsync,
@@ -30,6 +30,7 @@ import { AppState, useAppDispatch } from '../redux/store'
 import { checkImage } from '../utils/checkImage'
 import { cleanImage } from '../utils/cleanImage'
 import { sortByHighest, sortByLowest } from '../utils/sort'
+import { toast } from 'react-toastify'
 
 const Products = () => {
   const [selectedSort, setSelectedSort] = useState<Sort>('Default')
@@ -51,6 +52,11 @@ const Products = () => {
   numberOfPages = numberOfPages === 0 ? 1 : numberOfPages
 
   const handleAddToCart = debounce((product: ProductRealType) => {
+    if (!user) {
+      toast.error('Please log in to add item to cart!', { position: 'bottom-left' })
+      return <Box>User not found!</Box>
+    }
+
     cartDispatch(addToCart(product))
   }, 300)
 
@@ -76,7 +82,7 @@ const Products = () => {
   }, [dispatch, selectedCategory, offset, limit, products.length])
 
   useEffect(() => {
-    const accessToken = localStorage.getItem('access_token')
+    const accessToken = localStorage.getItem('token')
     if (accessToken && !user) {
       dispatch(authenticateUserAsync(accessToken))
     }

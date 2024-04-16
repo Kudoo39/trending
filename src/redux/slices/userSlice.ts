@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios, { AxiosError } from 'axios'
 import { toast } from 'react-toastify'
 
-import { RealUserRegister, User, UserCredential, UserRegister } from '../../misc/type'
+import { RealUser, RealUserRegister, User, UserCredential, UserRegister } from '../../misc/type'
 
 const userUrl = 'https://api.escuelajs.co/api/v1/users'
 const realUserUrl = 'http://localhost:8080/api/v1/users'
@@ -16,8 +16,8 @@ const realProfileUrl = 'http://localhost:8080/api/v1/users/profile'
 const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true'
 
 type InitialState = {
-  user?: User | null
-  users: User[]
+  user?: RealUser | null
+  users: RealUser[]
   loading: boolean
   error: string | null
   isAuthenticated: boolean
@@ -66,7 +66,7 @@ export const loginUserAsync = createAsyncThunk(
       localStorage.setItem('token', response.data.token)
 
       const authentication = await dispatch(authenticateUserAsync(response.data.token))
-      return authentication.payload as User
+      return authentication.payload as RealUser
     } catch (e) {
       const error = e as Error
       toast.error('Login failed. Please try again!', { position: 'bottom-left' })
@@ -99,7 +99,7 @@ const userSlice = createSlice({
     builder.addCase(loginUserAsync.fulfilled, (state, action) => {
       return {
         ...state,
-        user: action.payload as User,
+        user: action.payload as RealUser,
         loading: false
       }
     })
