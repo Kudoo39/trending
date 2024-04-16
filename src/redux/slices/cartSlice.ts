@@ -1,8 +1,9 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { toast } from 'react-toastify'
 
-import { CartRealType, CartType, ProductRealType, ProductType, UpdateQuantity } from '../../misc/type'
+import { CartRealType, CartType, OrderProductsType, ProductRealType, ProductType, UpdateQuantity } from '../../misc/type'
 import axios, { AxiosError } from 'axios'
+import { useDispatch } from 'react-redux'
 
 const cart = JSON.parse(localStorage.getItem('cart') || '[]')
 
@@ -10,20 +11,35 @@ const url = 'http://localhost:8080/api/v1/orders'
 
 type InitialState = {
   cart: CartRealType[]
+  loading: boolean
+  error: string | null
 }
 
 const initialState: InitialState = {
-  cart: cart
+  cart: cart,
+  loading: false,
+  error: null
 }
 
-export const addOrderByUserId = createAsyncThunk('addOrderByUserId', async (userId: string) => {
+export const addOrderByUserId = createAsyncThunk('addOrderByUserId',
+  async ({ userId, orders }: { userId: string; orders: OrderProductsType }) => {
+    try {
+      const response = await axios.post(`${url}/${userId}`, orders)
+      toast.success('Order added successfully!', { position: 'bottom-left' })
+      return response.data
+    } catch (e) {
+      const error = e as AxiosError
+      toast.error('Order added failed :/', { position: 'bottom-left' })
+      return error
+    }
+  })
+
+export const getOrderByUserId = createAsyncThunk('getOrderByUserId', async (userId: string) => {
   try {
-    const response = await axios.post(url, userId)
-    toast.success('Order added successfully!', { position: 'bottom-left' })
+    const response = await axios.get(`${url}/${userId}`)
     return response.data
   } catch (e) {
     const error = e as AxiosError
-    toast.error('Order added failed :/', { position: 'bottom-left' })
     return error
   }
 })
@@ -66,11 +82,10 @@ const cartSlice = createSlice({
     }
   },
   extraReducers(builder) {
-    builder.addCase(addOrderByUserId.fulfilled, (state, action) => {
+    // addOrderByUserId
+    builder.addCase(addOrderByUserId.fulfilled, state => {
       return {
-        ...state,
-        user: action.payload,
-        loading: false
+        ...state
       }
     })
     builder.addCase(addOrderByUserId.pending, state => {
@@ -80,6 +95,27 @@ const cartSlice = createSlice({
       }
     })
     builder.addCase(addOrderByUserId.rejected, (state, action) => {
+      return {
+        ...state,
+        loading: false,
+        error: action.error.message ?? 'error'
+      }
+    })
+    // getOrderByUserId
+    builder.addCase(getOrderByUserId.fulfilled, (state, action) => {
+      return {
+        ...state,
+        cart: action.payload,
+        loading: false
+      }
+    })
+    builder.addCase(getOrderByUserId.pending, state => {
+      return {
+        ...state,
+        loading: true
+      }
+    })
+    builder.addCase(getOrderByUserId.rejected, (state, action) => {
       return {
         ...state,
         loading: false,

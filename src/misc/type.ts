@@ -68,6 +68,13 @@ export type CartRealType = ProductRealType & {
   quantity: number
 }
 
+export type OrderProductsType = {
+  products: {
+    productId: string
+    quantity: number
+  }[]
+}
+
 export type UpdateQuantity = {
   _id: string
   quantity: number

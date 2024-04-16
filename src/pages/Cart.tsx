@@ -11,37 +11,62 @@ import Divider from '@mui/material/Divider'
 import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import defaultImage from '../assets/images/default_image.jpg'
-import { clearCart, removeFromCart, updateQuantity } from '../redux/slices/cartSlice'
-import { AppState } from '../redux/store'
+import { addOrderByUserId, clearCart, removeFromCart, updateQuantity } from '../redux/slices/cartSlice'
+import { AppState, useAppDispatch } from '../redux/store'
 import { checkImage } from '../utils/checkImage'
 import { cleanImage } from '../utils/cleanImage'
+import { useEffect } from 'react'
+import { authenticateUserAsync } from '../redux/slices/userSlice'
+import { debounce } from 'lodash'
 
 const Cart = () => {
+  const user = useSelector((state: AppState) => state.users.user)
   const cartItems = useSelector((state: AppState) => state.cart.cart)
-  const dispatch = useDispatch()
+  const cartDispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
   const totalPrice = cartItems.reduce((total, currentItem) => total + currentItem.price * currentItem.quantity, 0)
 
   const handleRemove = (_id: string) => {
-    dispatch(removeFromCart(_id))
+    cartDispatch(removeFromCart(_id))
   }
 
   const handleIncrease = (_id: string) => {
-    dispatch(updateQuantity({ _id, quantity: 1 }))
+    cartDispatch(updateQuantity({ _id, quantity: 1 }))
   }
 
   const handleDecrease = (_id: string) => {
-    dispatch(updateQuantity({ _id, quantity: -1 }))
+    cartDispatch(updateQuantity({ _id, quantity: -1 }))
   }
 
-  const handleCheckout = () => {
+  const handleCheckout = debounce(() => {
     if (cartItems.length === 0) {
       toast.error('There is no product!', { position: 'bottom-left' })
+    } else if (!user) {
+      toast.error('Please log in to add item to cart!', { position: 'bottom-left' })
     } else {
-      toast.success('Your order has been processed!', { position: 'bottom-left' })
-      dispatch(clearCart())
+      const orderProducts = {
+        products: cartItems.map((item) => ({
+          productId: item._id,
+          quantity: item.quantity
+        }))
+      }
+
+      toast.success('Your order has been processed!', { position: 'bottom-left', autoClose: 500 })
+
+      setTimeout(() => {
+        dispatch(addOrderByUserId({ userId: user?._id, orders: orderProducts }))
+        cartDispatch(clearCart())
+      }, 1000)
     }
-  }
+  }, 300)
+
+  useEffect(() => {
+    const accessToken = localStorage.getItem('token')
+    if (accessToken && !user) {
+      dispatch(authenticateUserAsync(accessToken))
+    }
+  }, [dispatch, user])
 
   return (
     <Box

@@ -59,7 +59,7 @@ const Profile = () => {
           </Box>
           <Box sx={{ marginBottom: 2 }}>
             <Typography variant="h5" component="h1" sx={{ marginBottom: 1 }}>
-              {user.name}
+              {user.firstname} {user.lastname}
             </Typography>
             <Typography variant="subtitle1" sx={{ color: 'text.secondary' }}>
               {user.email}
@@ -68,7 +68,7 @@ const Profile = () => {
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <Box>
               <Typography variant="body1">Role: {user.role}</Typography>
-              <Typography variant="body1">ID: {user.id}</Typography>
+              <Typography variant="body1">ID: {user._id}</Typography>
             </Box>
             <Button variant="contained" onClick={handleLogout}>
               Log Out
