@@ -2,11 +2,9 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { toast } from 'react-toastify'
 import axios, { AxiosError } from 'axios'
 
-import { CreateProductType, CreateRealProductType, ProductRealType, ProductType, UpdateProductType } from '../../misc/type'
+import { CreateRealProductType, ProductRealType, UpdateProductType } from '../../misc/type'
 
-const url = 'https://api.escuelajs.co/api/v1/products'
 const realUrl = 'http://localhost:8080/api/v1/products'
-const categoryUrl = 'https://api.escuelajs.co/api/v1/categories'
 
 type InitialState = {
   products: ProductRealType[]
@@ -103,7 +101,7 @@ export const updateProductAsync = createAsyncThunk(
   'updateProductAsync',
   async ({ updateProduct, productId }: { updateProduct: UpdateProductType; productId: string }) => {
     try {
-      const response = await axios.put(`${url}/${productId}`, updateProduct)
+      const response = await axios.put(`${realUrl}/${productId}`, updateProduct)
       toast.success('Product updated successfully!', { position: 'bottom-left' })
       return response.data
     } catch (e) {
@@ -116,7 +114,7 @@ export const updateProductAsync = createAsyncThunk(
 
 export const deleteProductAsync = createAsyncThunk('deleteProductAsync', async (productId: string) => {
   try {
-    const response = await axios.delete(`${url}/${productId}`)
+    const response = await axios.delete(`${realUrl}/${productId}`)
     toast.success('Product removed successfully!', { position: 'bottom-left' })
     return response.data
   } catch (e) {

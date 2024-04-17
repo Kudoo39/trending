@@ -19,8 +19,8 @@ const DemoAdminAccount = () => {
 
   const formik = useFormik({
     initialValues: {
-      email: 'admin@mail.com',
-      password: 'admin123'
+      email: process.env.REACT_APP_ADMIN_EMAIL ?? '',
+      password: process.env.REACT_APP_ADMIN_PASSWORD ?? ''
     },
 
     onSubmit: (userCredential: UserCredential) => {

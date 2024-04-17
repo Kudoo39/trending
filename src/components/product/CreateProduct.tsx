@@ -15,7 +15,7 @@ import MenuItem from '@mui/material/MenuItem'
 import FormHelperText from '@mui/material/FormHelperText'
 import { createProductsAsync, fetchProductsAsync } from '../../redux/slices/productSlice'
 import { AppState, useAppDispatch } from '../../redux/store'
-import { CreateProductType, CreateRealProductType } from '../../misc/type'
+import { CreateRealProductType } from '../../misc/type'
 
 const CreateProduct = () => {
   const categories = useSelector((state: AppState) => state.categories.categories)

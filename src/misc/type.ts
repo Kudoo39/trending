@@ -69,7 +69,9 @@ export type CartRealType = ProductRealType & {
 }
 
 export type OrderProductsType = {
+  _id?: string
   products: {
+    _id?: string
     productId: string
     quantity: number
   }[]
@@ -99,6 +101,7 @@ export type RealUserRegister = UserCredential & {
 export type RealUser = RealUserRegister & {
   role: 'customer' | 'admin'
   _id: string
+  orders: OrderProductsType[]
 }
 
 export type User = UserRegister & {
