@@ -19,8 +19,8 @@ const DemoUserAccount = () => {
 
   const formik = useFormik({
     initialValues: {
-      email: 'john@mail.com',
-      password: 'changeme'
+      email: process.env.REACT_APP_USER_EMAIL ?? '',
+      password: process.env.REACT_APP_USER_PASSWORD ?? ''
     },
 
     onSubmit: (userCredential: UserCredential) => {

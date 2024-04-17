@@ -2,15 +2,12 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios, { AxiosError } from 'axios'
 import { toast } from 'react-toastify'
 
-import { RealUser, RealUserRegister, User, UserCredential, UserRegister } from '../../misc/type'
+import { RealUser, RealUserRegister, UserCredential } from '../../misc/type'
 
-const userUrl = 'https://api.escuelajs.co/api/v1/users'
 const realUserUrl = 'http://localhost:8080/api/v1/users'
 
-const loginUrl = 'https://api.escuelajs.co/api/v1/auth/login'
 const realLoginUrl = 'http://localhost:8080/api/v1/users/login'
 
-const profileUrl = 'https://api.escuelajs.co/api/v1/auth/profile'
 const realProfileUrl = 'http://localhost:8080/api/v1/users/profile'
 
 const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true'

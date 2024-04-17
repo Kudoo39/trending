@@ -1,9 +1,9 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { toast } from 'react-toastify'
-
-import { CartRealType, CartType, OrderProductsType, ProductRealType, ProductType, UpdateQuantity } from '../../misc/type'
 import axios, { AxiosError } from 'axios'
-import { useDispatch } from 'react-redux'
+
+import { CartRealType, OrderProductsType, ProductRealType, UpdateQuantity } from '../../misc/type'
+
 
 const cart = JSON.parse(localStorage.getItem('cart') || '[]')
 
@@ -11,12 +11,14 @@ const url = 'http://localhost:8080/api/v1/orders'
 
 type InitialState = {
   cart: CartRealType[]
+  orders: CartRealType[]
   loading: boolean
   error: string | null
 }
 
 const initialState: InitialState = {
   cart: cart,
+  orders: [],
   loading: false,
   error: null
 }
@@ -105,7 +107,7 @@ const cartSlice = createSlice({
     builder.addCase(getOrderByUserId.fulfilled, (state, action) => {
       return {
         ...state,
-        cart: action.payload,
+        orders: action.payload,
         loading: false
       }
     })

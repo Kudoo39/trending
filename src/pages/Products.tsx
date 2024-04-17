@@ -2,6 +2,7 @@ import { debounce } from 'lodash'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link as RouterLink } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -17,8 +18,8 @@ import Categories from '../components/Categories'
 import ScrollUpButton from '../components/ScrollUpButton'
 import SortPrice from '../components/SortPrice'
 import CreateProduct from '../components/product/CreateProduct'
-import { Sort, ProductType, ProductRealType } from '../misc/type'
-import { addOrderByUserId, addToCart } from '../redux/slices/cartSlice'
+import { Sort, ProductRealType } from '../misc/type'
+import { addToCart } from '../redux/slices/cartSlice'
 import {
   fetchProductsAsync,
   fetchProductsCategoryAsync,
@@ -30,7 +31,7 @@ import { AppState, useAppDispatch } from '../redux/store'
 import { checkImage } from '../utils/checkImage'
 import { cleanImage } from '../utils/cleanImage'
 import { sortByHighest, sortByLowest } from '../utils/sort'
-import { toast } from 'react-toastify'
+import { ALL_CATEGORY_ID } from '../misc/constants'
 
 const Products = () => {
   const [selectedSort, setSelectedSort] = useState<Sort>('Default')
@@ -65,7 +66,7 @@ const Products = () => {
   }
 
   useEffect(() => {
-    if (selectedCategory === '661554901973ad63139c85fc') {
+    if (selectedCategory === ALL_CATEGORY_ID) {
       dispatch(fetchProductsAsync())
     } else {
       dispatch(fetchProductsCategoryAsync(selectedCategory))
@@ -74,7 +75,7 @@ const Products = () => {
   }, [dispatch, selectedCategory])
 
   useEffect(() => {
-    if (selectedCategory === '661554901973ad63139c85fc') {
+    if (selectedCategory === ALL_CATEGORY_ID) {
       dispatch(fetchProductsPageAsync({ offset, limit }))
     } else {
       dispatch(fetchProductsCategoryPageAsync({ categoryId: selectedCategory, offset, limit }))

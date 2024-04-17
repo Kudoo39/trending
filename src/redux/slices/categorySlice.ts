@@ -1,8 +1,9 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { Category, RealCategory } from '../../misc/type'
 import axios, { AxiosError } from 'axios'
 
-const url = 'https://api.escuelajs.co/api/v1/categories'
+import { ALL_CATEGORY_ID } from '../../misc/constants'
+import { RealCategory } from '../../misc/type'
+
 const realUrl = 'http://localhost:8080/api/v1/categories'
 
 type InitialState = {
@@ -14,7 +15,7 @@ type InitialState = {
 
 const initialState: InitialState = {
   categories: [],
-  selectedCategory: '661554901973ad63139c85fc',
+  selectedCategory: ALL_CATEGORY_ID,
   loading: false,
   error: null
 }
