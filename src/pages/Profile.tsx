@@ -6,11 +6,13 @@ import Button from '@mui/material/Button'
 import CircularProgress from '@mui/material/CircularProgress'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import BorderColorIcon from '@mui/icons-material/BorderColor'
+import SettingsIcon from '@mui/icons-material/Settings';
 import { authenticateUserAsync, logout } from '../redux/slices/userSlice'
 import { AppState, useAppDispatch } from '../redux/store'
 import { OrderProductsType } from '../misc/type'
 import Card from '@mui/material/Card/Card'
+import UpdateUser from '../components/user/UpdateUser'
+import UpdateEmail from '../components/user/UpdateEmail'
 
 const Profile = () => {
   const user = useSelector((state: AppState) => state.users.user)
@@ -33,12 +35,6 @@ const Profile = () => {
     }
   }, [dispatch, navigate, user])
 
-  // useEffect(() => {
-  //   if (user) {
-  //     dispatch(getOrderByUserId(user._id));
-  //   }
-  // }, [dispatch, user]);
-
   const [tab, setTab] = useState('profile')
 
   if (loading) {
@@ -54,58 +50,6 @@ const Profile = () => {
   }
 
   return (
-    // <Box
-    //   sx={{
-    //     maxWidth: 600,
-    //     margin: '12px auto 0',
-    //     padding: 3,
-    //     boxShadow: 1,
-    //     borderRadius: 4
-    //   }}
-    // >
-    //   {user && (
-    //     <>
-          // <Box sx={{ margin: '8px 0 8px 0' }}>
-          //   <img src={user.avatar} alt="Avatar" style={{ width: 120, height: 120, borderRadius: '50%' }} />
-          // </Box>
-          // <Box sx={{ marginBottom: 2 }}>
-          //   <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-          //     <Typography variant="h5" component="h1" sx={{ marginBottom: 1 }}>
-          //       {user.firstname} {user.lastname}
-          //     </Typography>
-          //     <BorderColorIcon sx={{ fontSize: '20px', marginLeft: '15px' }} />
-          //   </Box>
-          //   <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-          //     <Typography variant="subtitle1" sx={{ color: 'text.secondary' }}>
-          //       {user.email}
-          //     </Typography>
-          //     <BorderColorIcon sx={{ fontSize: '20px', marginLeft: '15px' }} />
-          //   </Box>
-          // </Box>
-          // <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          //   <Button variant="contained" onClick={handleLogout}>
-          //     Log Out
-          //   </Button>
-          // </Box>
-
-          // <Box>
-          //   <Typography variant="h4">Your Orders:</Typography>
-          //   {user.orders.map((order: OrderProductsType, index: number) => (
-          //     <Box key={order._id} sx={{ marginBottom: 2 }}>
-          //       <Typography variant="subtitle1">Order {index + 1}:</Typography>
-          //       <ul>
-          //         {order.products.map(product => (
-          //           <li key={product._id}>
-          //             {product.quantity} x {product.productId}
-          //           </li>
-          //         ))}
-          //       </ul>
-          //     </Box>
-          //   ))}
-          // </Box>
-    //     </>
-    //   )}
-    // </Box>
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: '100vh' }}>
       <Box sx={{ margin: '20px 0 20px 0' }}>
         <Button variant={tab === 'profile' ? 'contained' : 'outlined'} onClick={() => setTab('profile')}>Profile</Button>
@@ -118,22 +62,23 @@ const Profile = () => {
           </Box>
           <Box sx={{ marginBottom: 2 }}>
             <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-              <Typography variant="h5" component="h1" sx={{ marginBottom: 1 }}>
+              <Typography variant="h5" component="h1">
                 {user.firstname} {user.lastname}
               </Typography>
-              <BorderColorIcon sx={{ fontSize: '20px', marginLeft: '15px' }} />
+              <UpdateUser />
             </Box>
             <Box sx={{ display: 'flex', flexDirection: 'row' }}>
               <Typography variant="subtitle1" sx={{ color: 'text.secondary' }}>
                 {user.email}
               </Typography>
-              <BorderColorIcon sx={{ fontSize: '20px', marginLeft: '15px' }} />
+              <UpdateEmail />
             </Box>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <Button variant="contained" onClick={handleLogout}>
               Log Out
             </Button>
+            <SettingsIcon />
           </Box>
         </Card>
       )}
