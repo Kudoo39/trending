@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios, { AxiosError } from 'axios'
 import { toast } from 'react-toastify'
 
-import { RealUser, RealUserRegister, UserCredential } from '../../misc/type'
+import { RealUser, RealUserRegister, UpdateUserType, UserCredential } from '../../misc/type'
 
 const realUserUrl = 'http://localhost:8080/api/v1/users'
 
@@ -72,12 +72,28 @@ export const loginUserAsync = createAsyncThunk(
   }
 )
 
+export const updateUserProfileAsync = createAsyncThunk(
+  'updateUserProfileAsync',
+  async ({ updateUser, userId }: {updateUser: UpdateUserType, userId: string}) => {
+    try {
+      const response = await axios.put(`${realUserUrl}/${userId}`, updateUser)
+      toast.success('Profile updated successfully!', { position: 'bottom-left' })
+      return response.data
+    } catch (e) {
+      const error = e as Error
+      toast.error('Update failed. Please try again!', { position: 'bottom-left' })
+      return error
+    }
+  }
+)
+
 const userSlice = createSlice({
   name: 'users',
   initialState,
   reducers: {
     logout(state) {
       state.user = null
+      state.loading = false
       state.isAuthenticated = false
       localStorage.removeItem('token')
       localStorage.removeItem('isAuthenticated')
@@ -114,6 +130,32 @@ const userSlice = createSlice({
       }
     })
     builder.addCase(registerUserAsync.rejected, (state, action) => {
+      return {
+        ...state,
+        loading: false,
+        error: action.error.message ?? 'error'
+      }
+    })
+    // updateUserProfileAsync
+    builder.addCase(updateUserProfileAsync.fulfilled, (state, action) => {
+      const findindUser = state.users.findIndex(user => user._id === action.payload._id)
+      if (findindUser !== -1) {
+        return {
+          ...state,
+          users: state.users.map((user, index) => (index === findindUser ? action.payload : user)),
+          loading: false,
+          error: null
+        }
+      }
+      return state
+    })
+    builder.addCase(updateUserProfileAsync.pending, state => {
+      return {
+        ...state,
+        loading: true
+      }
+    })
+    builder.addCase(updateUserProfileAsync.rejected, (state, action) => {
       return {
         ...state,
         loading: false,

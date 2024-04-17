@@ -87,6 +87,12 @@ export type UserCredential = {
   password: string
 }
 
+export type UpdateUserType = {
+  firstname?: string
+  lastname?: string
+  email?: string
+}
+
 export type UserRegister = UserCredential & {
   name: string
   avatar: string

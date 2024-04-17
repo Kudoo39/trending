@@ -96,7 +96,7 @@ const UpdateProduct = () => {
           }}
         >
           <Typography variant="h5" sx={{ fontWeight: '600' }}>
-            New Product
+            Update Product
           </Typography>
           <FormControl
             component="form"
