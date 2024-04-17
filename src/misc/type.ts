@@ -93,6 +93,12 @@ export type UpdateUserType = {
   email?: string
 }
 
+export type UpdatePasswordType = {
+  email: string
+  password: string
+  newPassword: string
+}
+
 export type UserRegister = UserCredential & {
   name: string
   avatar: string
@@ -108,6 +114,7 @@ export type RealUser = RealUserRegister & {
   role: 'customer' | 'admin'
   _id: string
   orders: OrderProductsType[]
+  newPassword?: string
 }
 
 export type User = UserRegister & {

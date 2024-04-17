@@ -2,13 +2,14 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios, { AxiosError } from 'axios'
 import { toast } from 'react-toastify'
 
-import { RealUser, RealUserRegister, UpdateUserType, UserCredential } from '../../misc/type'
+import { RealUser, RealUserRegister, UpdatePasswordType, UpdateUserType, UserCredential } from '../../misc/type'
 
 const realUserUrl = 'http://localhost:8080/api/v1/users'
 
 const realLoginUrl = 'http://localhost:8080/api/v1/users/login'
 
 const realProfileUrl = 'http://localhost:8080/api/v1/users/profile'
+const realProfilePasswordUrl = 'http://localhost:8080/api/v1/users/password'
 
 const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true'
 
@@ -87,6 +88,21 @@ export const updateUserProfileAsync = createAsyncThunk(
   }
 )
 
+export const updateUserPasswordAsync = createAsyncThunk(
+  'updateUserPasswordAsync',
+  async ({ updatePassword }: {updatePassword: UpdatePasswordType }) => {
+    try {
+      const response = await axios.patch(`${realProfilePasswordUrl}`, updatePassword)
+      toast.success('Password updated successfully!', { position: 'bottom-left' })
+      return response.data
+    } catch (e) {
+      const error = e as Error
+      toast.error('Update password failed. Please try again!', { position: 'bottom-left' })
+      return error
+    }
+  }
+)
+
 const userSlice = createSlice({
   name: 'users',
   initialState,
@@ -156,6 +172,27 @@ const userSlice = createSlice({
       }
     })
     builder.addCase(updateUserProfileAsync.rejected, (state, action) => {
+      return {
+        ...state,
+        loading: false,
+        error: action.error.message ?? 'error'
+      }
+    })
+
+    // updateUserPasswordAsync
+    builder.addCase(updateUserPasswordAsync.fulfilled, state => {
+      return {
+        ...state,
+        loading: false
+      }
+    })
+    builder.addCase(updateUserPasswordAsync.pending, state => {
+      return {
+        ...state,
+        loading: true
+      }
+    })
+    builder.addCase(updateUserPasswordAsync.rejected, (state, action) => {
       return {
         ...state,
         loading: false,
