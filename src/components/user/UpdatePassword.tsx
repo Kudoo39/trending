@@ -1,24 +1,22 @@
 import { useFormik } from 'formik'
 import { useState } from 'react'
 import * as Yup from 'yup'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
-import BorderColorIcon from '@mui/icons-material/BorderColor'
+import SettingsIcon from '@mui/icons-material/Settings'
 import CircularProgress from '@mui/material/CircularProgress'
 import FormControl from '@mui/material/FormControl/FormControl'
 import Typography from '@mui/material/Typography/Typography'
 import Modal from '@mui/material/Modal/Modal'
-import { logout, updateUserProfileAsync } from '../../redux/slices/userSlice'
+import { authenticateUserAsync, updateUserPasswordAsync } from '../../redux/slices/userSlice'
 import { AppState, useAppDispatch } from '../../redux/store'
-import { UpdateUserType } from '../../misc/type'
-import { toast } from 'react-toastify'
+import { UpdatePasswordType } from '../../misc/type'
 
-const UpdateEmail = () => {
+const UpdatePassword = () => {
   const dispatch = useAppDispatch()
-  const userDispatch = useDispatch()
   const loading = useSelector((state: AppState) => state.users.loading)
   const error = useSelector((state: AppState) => state.users.error)
   const user = useSelector((state: AppState) => state.users.user)
@@ -26,20 +24,22 @@ const UpdateEmail = () => {
 
   const formik = useFormik({
     initialValues: {
-      email: user?.email
+      email: user?.email || '',
+      password: '',
+      newPassword: ''
     },
     validationSchema: Yup.object({
-      email: Yup.string().email('Invalid email address').required('Email is required')
+      email: Yup.string().min(3, 'First name must be at least 3 characters').required('First name is required'),
+      password: Yup.string().min(3, 'Password must be at least 3 characters').required('Password is required'),
+      newPassword: Yup.string().min(3, 'New password must be at least 3 characters').required('New password is required')
     }),
-    onSubmit: async (data: UpdateUserType, { resetForm }) => {
-      const modifiedUser = {
-        updateUser: data,
-        userId: String(user?._id)
+    onSubmit: async (data: UpdatePasswordType, { resetForm }) => {
+      const modifiedData = {
+        updatePassword: data
       }
       try {
-        await dispatch(updateUserProfileAsync(modifiedUser))
-        await userDispatch(logout())
-        toast.success('Your email is updated successfully! Please log in again', { position: 'bottom-left' })
+        await dispatch(updateUserPasswordAsync(modifiedData))
+        await dispatch(authenticateUserAsync(localStorage.getItem('token') || ''))
       } catch (error) {
         return error
       }
@@ -70,7 +70,7 @@ const UpdateEmail = () => {
 
   return (
     <Box>
-      <BorderColorIcon sx={{ fontSize: '20px', marginLeft: '15px', 'cursor': 'pointer' }} onClick={handleOpenModal} />
+      <SettingsIcon sx={{ fontSize: '24px', marginLeft: '15px', 'cursor': 'pointer' }} onClick={handleOpenModal} />
       <Modal open={openModal} onClose={handleCloseModal}>
         <Box
           sx={{
@@ -85,7 +85,7 @@ const UpdateEmail = () => {
           }}
         >
           <Typography variant="h5" sx={{ fontWeight: '600', marginBottom: 4 }}>
-            Update Email
+            Change Password
           </Typography>
           <FormControl
             component="form"
@@ -96,11 +96,36 @@ const UpdateEmail = () => {
               id="email"
               name="email"
               label="Email"
+              disabled
               type="text"
               value={formik.values.email}
               onChange={formik.handleChange}
               error={formik.touched.email && Boolean(formik.errors.email)}
               helperText={formik.touched.email && formik.errors.email}
+              fullWidth
+              sx={{ marginBottom: 1, width: '240px' }}
+            />
+            <TextField
+              id="password"
+              name="password"
+              label="Your Old Password"
+              type="password"
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              error={formik.touched.password && Boolean(formik.errors.password)}
+              helperText={formik.touched.password && formik.errors.password}
+              fullWidth
+              sx={{ marginBottom: 1, width: '240px' }}
+            />
+            <TextField
+              id="newPassword"
+              name="newPassword"
+              label="New Password"
+              type="password"
+              value={formik.values.newPassword}
+              onChange={formik.handleChange}
+              error={formik.touched.newPassword && Boolean(formik.errors.newPassword)}
+              helperText={formik.touched.newPassword && formik.errors.newPassword}
               fullWidth
               sx={{ marginBottom: 1, width: '240px' }}
             />
@@ -115,4 +140,4 @@ const UpdateEmail = () => {
   )
 }
 
-export default UpdateEmail
+export default UpdatePassword

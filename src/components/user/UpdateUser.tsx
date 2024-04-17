@@ -29,7 +29,7 @@ const UpdateUser = () => {
     },
     validationSchema: Yup.object({
       firstname: Yup.string().min(3, 'First name must be at least 3 characters').required('First name is required'),
-      lastname: Yup.string().min(1, 'Last name must be at least 1 character').required('Last name is required'),
+      lastname: Yup.string().min(1, 'Last name must be at least 1 character').required('Last name is required')
     }),
     onSubmit: async (data: UpdateUserType, { resetForm }) => {
       const modifiedUser = {
@@ -69,7 +69,7 @@ const UpdateUser = () => {
 
   return (
     <Box>
-      <BorderColorIcon sx={{ fontSize: '20px', marginLeft: '15px' }} onClick={handleOpenModal} />
+      <BorderColorIcon sx={{ fontSize: '20px', marginLeft: '15px', 'cursor': 'pointer' }} onClick={handleOpenModal} />
       <Modal open={openModal} onClose={handleCloseModal}>
         <Box
           sx={{

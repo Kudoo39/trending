@@ -14,14 +14,12 @@ import DemoAdminAccount from '../components/auth/DemoAdminAccount'
 import { loginUserAsync } from '../redux/slices/userSlice'
 import { AppState, useAppDispatch } from '../redux/store'
 import { UserCredential } from '../misc/type'
-import { useEffect } from 'react'
 
 const Login = () => {
   const loading = useSelector((state: AppState) => state.users.loading)
   const error = useSelector((state: AppState) => state.users.error)
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  const isAuthenticated = useSelector((state: AppState) => state.users.isAuthenticated)
 
   const formik = useFormik({
     initialValues: {

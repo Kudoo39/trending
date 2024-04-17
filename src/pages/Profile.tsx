@@ -6,13 +6,13 @@ import Button from '@mui/material/Button'
 import CircularProgress from '@mui/material/CircularProgress'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import SettingsIcon from '@mui/icons-material/Settings';
 import { authenticateUserAsync, logout } from '../redux/slices/userSlice'
 import { AppState, useAppDispatch } from '../redux/store'
 import { OrderProductsType } from '../misc/type'
 import Card from '@mui/material/Card/Card'
 import UpdateUser from '../components/user/UpdateUser'
 import UpdateEmail from '../components/user/UpdateEmail'
+import UpdatePassword from '../components/user/UpdatePassword'
 
 const Profile = () => {
   const user = useSelector((state: AppState) => state.users.user)
@@ -78,7 +78,7 @@ const Profile = () => {
             <Button variant="contained" onClick={handleLogout}>
               Log Out
             </Button>
-            <SettingsIcon />
+            <UpdatePassword />
           </Box>
         </Card>
       )}
