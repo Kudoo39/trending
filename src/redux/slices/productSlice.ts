@@ -4,7 +4,7 @@ import axios, { AxiosError } from 'axios'
 
 import { CreateRealProductType, ProductRealType, UpdateProductType } from '../../misc/type'
 
-const realUrl = 'http://localhost:8080/api/v1/products'
+const realUrl = `${process.env.REACT_APP_BASE_URL ?? ''}/products`
 
 type InitialState = {
   products: ProductRealType[]
@@ -60,6 +60,19 @@ export const fetchProductsPageAsync = createAsyncThunk(
   }
 )
 
+export const fetchProductsSearchAsync = createAsyncThunk(
+  'fetchProductsSearchAsync',
+  async ({ searchQuery }: { searchQuery: string }) => {
+    try {
+      const response = await axios.get<RealUrlResponse>(`${realUrl}?searchQuery=${searchQuery}`)
+      return response.data
+    } catch (e) {
+      const error = e as AxiosError
+      return error
+    }
+  }
+)
+
 export const fetchProductsCategoryAsync = createAsyncThunk('fetchProductsCategoryAsync', async (categoryId: string) => {
   try {
     const response = await axios.get<RealUrlResponse>(`${realUrl}/category/${categoryId}`)
@@ -76,6 +89,21 @@ export const fetchProductsCategoryPageAsync = createAsyncThunk(
     try {
       const response = await axios.get<RealUrlResponse>(
         `${realUrl}/category/${categoryId}?offset=${offset}&&limit=${limit}`
+      )
+      return response.data
+    } catch (e) {
+      const error = e as AxiosError
+      return error
+    }
+  }
+)
+
+export const fetchProductsCategorySearchAsync = createAsyncThunk(
+  'fetchProductsCategorySearchAsync',
+  async ({ categoryId, searchQuery }: { categoryId: string; searchQuery: string }) => {
+    try {
+      const response = await axios.get<RealUrlResponse>(
+        `${realUrl}/category/${categoryId}?searchQuery=${searchQuery}`
       )
       return response.data
     } catch (e) {
@@ -202,6 +230,30 @@ const productSlice = createSlice({
         error: action.error.message ?? 'error'
       }
     })
+    //fetchProductsSearchAsync
+    builder.addCase(fetchProductsSearchAsync.fulfilled, (state, action) => {
+      if (!(action.payload instanceof Error)) {
+        return {
+          ...state,
+          products: action.payload.products,
+          loading: false,
+          error: null
+        }
+      }
+    })
+    builder.addCase(fetchProductsSearchAsync.pending, state => {
+      return {
+        ...state,
+        loading: true
+      }
+    })
+    builder.addCase(fetchProductsSearchAsync.rejected, (state, action) => {
+      return {
+        ...state,
+        loading: false,
+        error: action.error.message ?? 'error'
+      }
+    })
     // fetchProductsCategoryAsync
     builder.addCase(fetchProductsCategoryAsync.fulfilled, (state, action) => {
       if (!(action.payload instanceof Error)) {
@@ -245,6 +297,30 @@ const productSlice = createSlice({
       }
     })
     builder.addCase(fetchProductsCategoryPageAsync.rejected, (state, action) => {
+      return {
+        ...state,
+        loading: false,
+        error: action.error.message ?? 'error'
+      }
+    })
+    //fetchProductsCategorySearchAsync
+    builder.addCase(fetchProductsCategorySearchAsync.fulfilled, (state, action) => {
+      if (!(action.payload instanceof Error)) {
+        return {
+          ...state,
+          products: action.payload.products,
+          loading: false,
+          error: null
+        }
+      }
+    })
+    builder.addCase(fetchProductsCategorySearchAsync.pending, state => {
+      return {
+        ...state,
+        loading: true
+      }
+    })
+    builder.addCase(fetchProductsCategorySearchAsync.rejected, (state, action) => {
       return {
         ...state,
         loading: false,

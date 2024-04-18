@@ -1,5 +1,13 @@
 export type Sort = 'Default' | 'Highest Price' | 'Lowest Price'
 
+export type SearchProps = {
+  searchValue: string
+  // eslint-disable-next-line no-unused-vars
+  setSearchValue: (searchValue: string) => void
+  // eslint-disable-next-line no-unused-vars
+  handleSearch: (searchValue: string) => void
+}
+
 export type SortProps = {
   selectedSort: Sort
   // eslint-disable-next-line no-unused-vars
