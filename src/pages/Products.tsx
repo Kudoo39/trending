@@ -1,5 +1,5 @@
 import { debounce } from 'lodash'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link as RouterLink } from 'react-router-dom'
 import { toast } from 'react-toastify'
@@ -18,13 +18,14 @@ import Categories from '../components/Categories'
 import ScrollUpButton from '../components/ScrollUpButton'
 import SortPrice from '../components/SortPrice'
 import CreateProduct from '../components/product/CreateProduct'
+import Search from '../components/Search'
 import { Sort, ProductRealType } from '../misc/type'
 import { addToCart } from '../redux/slices/cartSlice'
 import {
-  fetchProductsAsync,
-  fetchProductsCategoryAsync,
   fetchProductsCategoryPageAsync,
-  fetchProductsPageAsync
+  fetchProductsCategorySearchAsync,
+  fetchProductsPageAsync,
+  fetchProductsSearchAsync
 } from '../redux/slices/productSlice'
 import { authenticateUserAsync } from '../redux/slices/userSlice'
 import { AppState, useAppDispatch } from '../redux/store'
@@ -35,6 +36,7 @@ import { ALL_CATEGORY_ID } from '../misc/constants'
 
 const Products = () => {
   const [selectedSort, setSelectedSort] = useState<Sort>('Default')
+  const [searchValue, setSearchValue] = useState('')
   const [page, setPage] = useState(1)
   const productsPerPage = 8
 
@@ -52,6 +54,14 @@ const Products = () => {
   let numberOfPages = Math.ceil(total >= 0 ? total / productsPerPage : 0)
   numberOfPages = numberOfPages === 0 ? 1 : numberOfPages
 
+  const handleSearch = (searchValue: string) => {
+    if (selectedCategory === ALL_CATEGORY_ID) {
+      dispatch(fetchProductsSearchAsync({ searchQuery: searchValue }))
+    } else {
+      dispatch(fetchProductsCategorySearchAsync({ categoryId: selectedCategory, searchQuery: searchValue }))
+    }
+  }
+
   const handleAddToCart = debounce((product: ProductRealType) => {
     if (!user) {
       toast.error('Please log in to add item to cart!', { position: 'bottom-left' })
@@ -66,21 +76,12 @@ const Products = () => {
   }
 
   useEffect(() => {
-    if (selectedCategory === ALL_CATEGORY_ID) {
-      dispatch(fetchProductsAsync())
-    } else {
-      dispatch(fetchProductsCategoryAsync(selectedCategory))
-      setPage(1)
-    }
-  }, [dispatch, selectedCategory])
-
-  useEffect(() => {
-    if (selectedCategory === ALL_CATEGORY_ID) {
+    if (selectedCategory === ALL_CATEGORY_ID && searchValue === '') {
       dispatch(fetchProductsPageAsync({ offset, limit }))
-    } else {
+    } else if (searchValue === '') {
       dispatch(fetchProductsCategoryPageAsync({ categoryId: selectedCategory, offset, limit }))
     }
-  }, [dispatch, selectedCategory, offset, limit, products.length])
+  }, [dispatch, selectedCategory, offset, limit, products.length, searchValue])
 
   useEffect(() => {
     const accessToken = localStorage.getItem('token')
@@ -95,6 +96,8 @@ const Products = () => {
       : selectedSort === 'Highest Price'
         ? sortByHighest(products, 'price')
         : sortByLowest(products, 'price')
+
+  const memoizedSearchValue = useMemo(() => searchValue, [searchValue])
 
   if (loading) {
     return (
@@ -112,10 +115,13 @@ const Products = () => {
     <Box sx={{ display: 'flex', flexDirection: { xxs: 'column', xs: 'row' } }}>
       <Categories />
       <Box>
-        <Box sx={{ display: 'flex' }}>
+        <Box sx={{ display: 'flex', flexDirection: { xxs: 'column', sm: 'row' }, justifyContent: 'space-between' }}>
           <Box sx={{ display: 'flex' }}>
             <SortPrice selectedSort={selectedSort} setSelectedSort={setSelectedSort} />
             {user && user.role === 'admin' && <CreateProduct />}
+          </Box>
+          <Box sx={{ display: 'flex' }}>
+            <Search searchValue={memoizedSearchValue} setSearchValue={setSearchValue} handleSearch={handleSearch} />
           </Box>
         </Box>
 
@@ -212,5 +218,4 @@ const Products = () => {
     </Box>
   )
 }
-
-export default Products
+export default React.memo(Products)
