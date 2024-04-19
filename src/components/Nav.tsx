@@ -117,6 +117,18 @@ const Nav = () => {
             Products
           </Box>
         </Link>
+        <Link component={RouterLink} to="/admin" sx={{ textDecoration: 'none' }}>
+          <Box
+            sx={{
+              'cursor': 'pointer',
+              'fontWeight': '600',
+              'color': 'text.primary',
+              '&:hover': { color: 'text.secondary', fontWeight: 650 }
+            }}
+          >
+            Admin Dashboard
+          </Box>
+        </Link>
       </Box>
 
       <Box sx={{ display: 'flex', alignItems: 'center' }}>

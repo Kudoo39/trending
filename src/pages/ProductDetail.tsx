@@ -85,9 +85,6 @@ const ProductDetail = () => {
 
           <Box sx={{ padding: 2 }}>
             <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
-              Product ID: {product._id}
-            </Typography>
-            <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
               Product:{' '}
               <Typography component="span" sx={{ fontWeight: 'normal' }}>
                 {product.title}
@@ -124,12 +121,6 @@ const ProductDetail = () => {
                 Add to cart
               </Button>
             </CardActions>
-            {user && user.role === 'admin' && (
-              <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                <UpdateProduct />
-                <DeleteProduct />
-              </Box>
-            )}
           </Box>
           <ScrollUpButton />
         </Card>

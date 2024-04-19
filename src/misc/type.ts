@@ -124,6 +124,7 @@ export type RealUser = RealUserRegister & {
   role: 'customer' | 'admin'
   _id: string
   orders: OrderProductsType[]
+  banStatus: boolean
   newPassword?: string
 }
 

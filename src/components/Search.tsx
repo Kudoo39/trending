@@ -51,6 +51,7 @@ const Search = ({ searchValue, setSearchValue, minPrice, setMinPrice, maxPrice, 
           )
         }}
         sx={{
+          width: '160px',
           marginRight: '2px',
           marginBottom: { xxs: '12px', lg: '0px' },
           '& label': { color: 'text.primary' },
@@ -91,6 +92,7 @@ const Search = ({ searchValue, setSearchValue, minPrice, setMinPrice, maxPrice, 
           )
         }}
         sx={{
+          width: '160px',
           marginRight: { xxs: '2px', lg: '12px' },
           marginBottom: { xxs: '12px', lg: '0px' },
           '& label': { color: 'text.primary' },

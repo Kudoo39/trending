@@ -9,24 +9,23 @@ import CircularProgress from '@mui/material/CircularProgress'
 import FormControl from '@mui/material/FormControl'
 import Modal from '@mui/material/Modal'
 import Typography from '@mui/material/Typography'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { deleteProductAsync, fetchProductsAsync } from '../../redux/slices/productSlice'
 import { AppState, useAppDispatch } from '../../redux/store'
 
-const DeleteProduct = () => {
+const DeleteProduct = ({ productId }: {productId: string}) => {
   const navigate = useNavigate()
   const loading = useSelector((state: AppState) => state.products.loading)
   const error = useSelector((state: AppState) => state.products.error)
   const dispatch = useAppDispatch()
   const [openModal, setOpenModal] = useState(false)
-  const { _id } = useParams()
 
   const formik = useFormik({
     initialValues: {},
     onSubmit: async () => {
       try {
         navigate('/products')
-        await dispatch(deleteProductAsync(String(_id)))
+        await dispatch(deleteProductAsync(String(productId)))
         await dispatch(fetchProductsAsync())
       } catch (error) {
         return error

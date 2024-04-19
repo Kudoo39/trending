@@ -12,6 +12,7 @@ import Box from '@mui/material/Box'
 import Login from './pages/Login'
 import Profile from './pages/Profile'
 import Register from './pages/Register'
+import Admin from './pages/Admin'
 import { AppState } from './redux/store'
 
 const App = () => {
@@ -24,6 +25,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />}></Route>
           <Route path="/products" element={<Product />}></Route>
+          <Route path="/admin" element={<Admin />}></Route>
           <Route path="/products/:_id" element={<ProductDetail />} />
           <Route path="/cart" element={<Cart />}></Route>
           <Route path="/profile" element={isAuthenticated ? <Profile /> : <Navigate to="/login" />}></Route>

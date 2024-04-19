@@ -14,15 +14,13 @@ import CircularProgress from '@mui/material/CircularProgress'
 import { fetchSingleProductAsync, updateProductAsync } from '../../redux/slices/productSlice'
 import { AppState, useAppDispatch } from '../../redux/store'
 import { UpdateProductType } from '../../misc/type'
-import { useParams } from 'react-router-dom'
 
-const UpdateProduct = () => {
+const UpdateProduct = ({ productId }: {productId: string}) => {
   const loading = useSelector((state: AppState) => state.products.loading)
   const error = useSelector((state: AppState) => state.products.error)
   const dispatch = useAppDispatch()
   const [openModal, setOpenModal] = useState(false)
   const product = useSelector((state: AppState) => state.products.product)
-  const { _id } = useParams()
 
   const formik = useFormik({
     initialValues: {
@@ -38,11 +36,11 @@ const UpdateProduct = () => {
     onSubmit: async (data: UpdateProductType, { resetForm }) => {
       const modifiedData = {
         updateProduct: data,
-        productId: String(_id)
+        productId: String(productId)
       }
       try {
         await dispatch(updateProductAsync(modifiedData))
-        await dispatch(fetchSingleProductAsync(String(_id)))
+        await dispatch(fetchSingleProductAsync(String(productId)))
       } catch (error) {
         return error
       }
@@ -108,7 +106,7 @@ const UpdateProduct = () => {
               name="id"
               label="Product ID"
               type="text"
-              value={_id}
+              value={productId}
               disabled
               variant="outlined"
               margin="normal"

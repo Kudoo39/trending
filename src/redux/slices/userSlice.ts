@@ -28,6 +28,19 @@ const initialState: InitialState = {
   isAuthenticated: isAuthenticated
 }
 
+export const fetchUsersAsync = createAsyncThunk(
+  'fetchUsersAsync',
+  async () => {
+    try {
+      const response = await axios.get<RealUser[]>(realUserUrl)
+      return response.data
+    } catch (e) {
+      const error = e as AxiosError
+      return error
+    }
+  }
+)
+
 export const registerUserAsync = createAsyncThunk('registerUserAsync', async (userData: RealUserRegister) => {
   try {
     const response = await axios.post(realUserUrl, userData)
@@ -117,6 +130,30 @@ const userSlice = createSlice({
     }
   },
   extraReducers(builder) {
+    // fetchUsersAsync
+    builder.addCase(fetchUsersAsync.fulfilled, (state, action) => {
+      if (!(action.payload instanceof Error)) {
+        return {
+          ...state,
+          users: action.payload,
+          loading: false,
+          error: null
+        }
+      }
+    })
+    builder.addCase(fetchUsersAsync.pending, state => {
+      return {
+        ...state,
+        loading: true
+      }
+    })
+    builder.addCase(fetchUsersAsync.rejected, (state, action) => {
+      return {
+        ...state,
+        loading: false,
+        error: action.error.message ?? 'error'
+      }
+    })
     builder.addCase(authenticateUserAsync.fulfilled, (state, action) => {
       return {
         ...state,
