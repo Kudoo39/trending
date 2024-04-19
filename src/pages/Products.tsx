@@ -22,10 +22,8 @@ import Search from '../components/Search'
 import { Sort, ProductRealType } from '../misc/type'
 import { addToCart } from '../redux/slices/cartSlice'
 import {
-  fetchProductsCategoryPageAsync,
-  fetchProductsCategorySearchAsync,
-  fetchProductsPageAsync,
-  fetchProductsSearchAsync
+  fetchProductsAllAsync,
+  fetchProductsCategoryAllAsync
 } from '../redux/slices/productSlice'
 import { authenticateUserAsync } from '../redux/slices/userSlice'
 import { AppState, useAppDispatch } from '../redux/store'
@@ -37,6 +35,8 @@ import { ALL_CATEGORY_ID } from '../misc/constants'
 const Products = () => {
   const [selectedSort, setSelectedSort] = useState<Sort>('Default')
   const [searchValue, setSearchValue] = useState('')
+  const [minPrice, setMinPrice] = useState(0)
+  const [maxPrice, setMaxPrice] = useState(10000)
   const [page, setPage] = useState(1)
   const productsPerPage = 8
 
@@ -54,12 +54,8 @@ const Products = () => {
   let numberOfPages = Math.ceil(total >= 0 ? total / productsPerPage : 0)
   numberOfPages = numberOfPages === 0 ? 1 : numberOfPages
 
-  const handleSearch = (searchValue: string) => {
-    if (selectedCategory === ALL_CATEGORY_ID) {
-      dispatch(fetchProductsSearchAsync({ searchQuery: searchValue }))
-    } else {
-      dispatch(fetchProductsCategorySearchAsync({ categoryId: selectedCategory, searchQuery: searchValue }))
-    }
+  const handleSearch = ({ searchValue, minPrice, maxPrice }: { searchValue: string, minPrice: number, maxPrice: number}) => {
+    fetchProducts(searchValue, minPrice, maxPrice)
   }
 
   const handleAddToCart = debounce((product: ProductRealType) => {
@@ -76,12 +72,17 @@ const Products = () => {
   }
 
   useEffect(() => {
-    if (selectedCategory === ALL_CATEGORY_ID && searchValue === '') {
-      dispatch(fetchProductsPageAsync({ offset, limit }))
-    } else if (searchValue === '') {
-      dispatch(fetchProductsCategoryPageAsync({ categoryId: selectedCategory, offset, limit }))
+    fetchProducts(searchValue, minPrice, maxPrice)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, user, offset, selectedCategory])
+
+  const fetchProducts = (searchValue: string, minPrice: number, maxPrice: number) => {
+    if (selectedCategory === ALL_CATEGORY_ID) {
+      dispatch(fetchProductsAllAsync({ searchQuery: searchValue, minPrice, maxPrice, offset, limit }))
+    } else {
+      dispatch(fetchProductsCategoryAllAsync({ categoryId: selectedCategory, searchQuery: searchValue, minPrice, maxPrice, offset, limit }))
     }
-  }, [dispatch, selectedCategory, offset, limit, products.length, searchValue])
+  }
 
   useEffect(() => {
     const accessToken = localStorage.getItem('token')
@@ -121,7 +122,15 @@ const Products = () => {
             {user && user.role === 'admin' && <CreateProduct />}
           </Box>
           <Box sx={{ display: 'flex' }}>
-            <Search searchValue={memoizedSearchValue} setSearchValue={setSearchValue} handleSearch={handleSearch} />
+            <Search
+              searchValue={memoizedSearchValue}
+              setSearchValue={setSearchValue}
+              minPrice={minPrice}
+              setMinPrice={setMinPrice}
+              maxPrice={maxPrice}
+              setMaxPrice={setMaxPrice}
+              handleSearch={handleSearch}
+            />
           </Box>
         </Box>
 
