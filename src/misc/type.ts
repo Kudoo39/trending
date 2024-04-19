@@ -1,16 +1,18 @@
+/* eslint-disable no-unused-vars */
 export type Sort = 'Default' | 'Highest Price' | 'Lowest Price'
 
 export type SearchProps = {
   searchValue: string
-  // eslint-disable-next-line no-unused-vars
   setSearchValue: (searchValue: string) => void
-  // eslint-disable-next-line no-unused-vars
-  handleSearch: (searchValue: string) => void
+  minPrice: number
+  setMinPrice: (minPrice: number) => void
+  maxPrice: number
+  setMaxPrice: (maxPrice: number) => void
+  handleSearch: (searchParams: { searchValue: string; minPrice: number; maxPrice: number }) => void
 }
 
 export type SortProps = {
   selectedSort: Sort
-  // eslint-disable-next-line no-unused-vars
   setSelectedSort: (sort: Sort) => void
 }
 

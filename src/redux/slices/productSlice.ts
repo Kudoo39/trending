@@ -27,15 +27,35 @@ type RealUrlResponse = {
   products: ProductRealType[]
 }
 
-export const fetchProductsAsync = createAsyncThunk('fetchProductsAsync', async () => {
-  try {
-    const response = await axios.get<RealUrlResponse>(realUrl)
-    return response.data
-  } catch (e) {
-    const error = e as AxiosError
-    return error
+export const fetchProductsAsync = createAsyncThunk(
+  'fetchProductsAsync',
+  async () => {
+    try {
+      const response = await axios.get<RealUrlResponse>(realUrl)
+      return response.data
+    } catch (e) {
+      const error = e as AxiosError
+      return error
+    }
   }
-})
+)
+
+export const fetchProductsAllAsync = createAsyncThunk(
+  'fetchProductsAllAsync',
+  async ({ searchQuery, minPrice, maxPrice, offset, limit }: { searchQuery: string; minPrice: number; maxPrice: number; offset: number; limit: number }) => {
+    try {
+      if (searchQuery === '') {
+        const response = await axios.get<RealUrlResponse>(`${realUrl}?minPrice=${minPrice}&&maxPrice=${maxPrice}&&offset=${offset}&&limit=${limit}`)
+        return response.data
+      }
+      const response = await axios.get<RealUrlResponse>(`${realUrl}?searchQuery=${searchQuery}&&minPrice=${minPrice}&&maxPrice=${maxPrice}&&offset=${offset}&&limit=${limit}`)
+      return response.data
+    } catch (e) {
+      const error = e as AxiosError
+      return error
+    }
+  }
+)
 
 export const fetchSingleProductAsync = createAsyncThunk('fetchSingleProductAsync', async (_id: string) => {
   try {
@@ -47,64 +67,15 @@ export const fetchSingleProductAsync = createAsyncThunk('fetchSingleProductAsync
   }
 })
 
-export const fetchProductsPageAsync = createAsyncThunk(
-  'fetchProductsPageAsync',
-  async ({ offset, limit }: { offset: number; limit: number }) => {
+export const fetchProductsCategoryAllAsync = createAsyncThunk(
+  'fetchProductsCategoryAllAsync',
+  async ({ categoryId, searchQuery, minPrice, maxPrice, offset, limit }: { categoryId: string; searchQuery: string; minPrice: number; maxPrice: number; offset: number; limit: number }) => {
     try {
-      const response = await axios.get<RealUrlResponse>(`${realUrl}?offset=${offset}&&limit=${limit}`)
-      return response.data
-    } catch (e) {
-      const error = e as AxiosError
-      return error
-    }
-  }
-)
-
-export const fetchProductsSearchAsync = createAsyncThunk(
-  'fetchProductsSearchAsync',
-  async ({ searchQuery }: { searchQuery: string }) => {
-    try {
-      const response = await axios.get<RealUrlResponse>(`${realUrl}?searchQuery=${searchQuery}`)
-      return response.data
-    } catch (e) {
-      const error = e as AxiosError
-      return error
-    }
-  }
-)
-
-export const fetchProductsCategoryAsync = createAsyncThunk('fetchProductsCategoryAsync', async (categoryId: string) => {
-  try {
-    const response = await axios.get<RealUrlResponse>(`${realUrl}/category/${categoryId}`)
-    return response.data
-  } catch (e) {
-    const error = e as AxiosError
-    return error
-  }
-})
-
-export const fetchProductsCategoryPageAsync = createAsyncThunk(
-  'fetchProductsCategoryPageAsync',
-  async ({ categoryId, offset, limit }: { categoryId: string; offset: number; limit: number }) => {
-    try {
-      const response = await axios.get<RealUrlResponse>(
-        `${realUrl}/category/${categoryId}?offset=${offset}&&limit=${limit}`
-      )
-      return response.data
-    } catch (e) {
-      const error = e as AxiosError
-      return error
-    }
-  }
-)
-
-export const fetchProductsCategorySearchAsync = createAsyncThunk(
-  'fetchProductsCategorySearchAsync',
-  async ({ categoryId, searchQuery }: { categoryId: string; searchQuery: string }) => {
-    try {
-      const response = await axios.get<RealUrlResponse>(
-        `${realUrl}/category/${categoryId}?searchQuery=${searchQuery}`
-      )
+      if (searchQuery === '') {
+        const response = await axios.get<RealUrlResponse>(`${realUrl}/category/${categoryId}?minPrice=${minPrice}&&maxPrice=${maxPrice}&&offset=${offset}&&limit=${limit}`)
+        return response.data
+      }
+      const response = await axios.get<RealUrlResponse>(`${realUrl}/category/${categoryId}?searchQuery=${searchQuery}&&minPrice=${minPrice}&&maxPrice=${maxPrice}&&offset=${offset}&&limit=${limit}`)
       return response.data
     } catch (e) {
       const error = e as AxiosError
@@ -182,6 +153,31 @@ const productSlice = createSlice({
         error: action.error.message ?? 'error'
       }
     })
+    // fetchProductsAllAsync
+    builder.addCase(fetchProductsAllAsync.fulfilled, (state, action) => {
+      if (!(action.payload instanceof Error)) {
+        return {
+          ...state,
+          products: action.payload.products,
+          total: action.payload.totalProduct,
+          loading: false,
+          error: null
+        }
+      }
+    })
+    builder.addCase(fetchProductsAllAsync.pending, state => {
+      return {
+        ...state,
+        loading: true
+      }
+    })
+    builder.addCase(fetchProductsAllAsync.rejected, (state, action) => {
+      return {
+        ...state,
+        loading: false,
+        error: action.error.message ?? 'error'
+      }
+    })
     // fetchSingleProductAsync
     builder.addCase(fetchSingleProductAsync.fulfilled, (state, action) => {
       if (!(action.payload instanceof Error)) {
@@ -206,56 +202,8 @@ const productSlice = createSlice({
         error: action.error.message ?? 'error'
       }
     })
-    //fetchProductsPageAsync
-    builder.addCase(fetchProductsPageAsync.fulfilled, (state, action) => {
-      if (!(action.payload instanceof Error)) {
-        return {
-          ...state,
-          products: action.payload.products,
-          loading: false,
-          error: null
-        }
-      }
-    })
-    builder.addCase(fetchProductsPageAsync.pending, state => {
-      return {
-        ...state,
-        loading: true
-      }
-    })
-    builder.addCase(fetchProductsPageAsync.rejected, (state, action) => {
-      return {
-        ...state,
-        loading: false,
-        error: action.error.message ?? 'error'
-      }
-    })
-    //fetchProductsSearchAsync
-    builder.addCase(fetchProductsSearchAsync.fulfilled, (state, action) => {
-      if (!(action.payload instanceof Error)) {
-        return {
-          ...state,
-          products: action.payload.products,
-          loading: false,
-          error: null
-        }
-      }
-    })
-    builder.addCase(fetchProductsSearchAsync.pending, state => {
-      return {
-        ...state,
-        loading: true
-      }
-    })
-    builder.addCase(fetchProductsSearchAsync.rejected, (state, action) => {
-      return {
-        ...state,
-        loading: false,
-        error: action.error.message ?? 'error'
-      }
-    })
-    // fetchProductsCategoryAsync
-    builder.addCase(fetchProductsCategoryAsync.fulfilled, (state, action) => {
+    //fetchProductsCategoryAllAsync
+    builder.addCase(fetchProductsCategoryAllAsync.fulfilled, (state, action) => {
       if (!(action.payload instanceof Error)) {
         return {
           ...state,
@@ -266,61 +214,13 @@ const productSlice = createSlice({
         }
       }
     })
-    builder.addCase(fetchProductsCategoryAsync.pending, state => {
+    builder.addCase(fetchProductsCategoryAllAsync.pending, state => {
       return {
         ...state,
         loading: true
       }
     })
-    builder.addCase(fetchProductsCategoryAsync.rejected, (state, action) => {
-      return {
-        ...state,
-        loading: false,
-        error: action.error.message ?? 'error'
-      }
-    })
-    //fetchProductsCategoryPageAsync
-    builder.addCase(fetchProductsCategoryPageAsync.fulfilled, (state, action) => {
-      if (!(action.payload instanceof Error)) {
-        return {
-          ...state,
-          products: action.payload.products,
-          loading: false,
-          error: null
-        }
-      }
-    })
-    builder.addCase(fetchProductsCategoryPageAsync.pending, state => {
-      return {
-        ...state,
-        loading: true
-      }
-    })
-    builder.addCase(fetchProductsCategoryPageAsync.rejected, (state, action) => {
-      return {
-        ...state,
-        loading: false,
-        error: action.error.message ?? 'error'
-      }
-    })
-    //fetchProductsCategorySearchAsync
-    builder.addCase(fetchProductsCategorySearchAsync.fulfilled, (state, action) => {
-      if (!(action.payload instanceof Error)) {
-        return {
-          ...state,
-          products: action.payload.products,
-          loading: false,
-          error: null
-        }
-      }
-    })
-    builder.addCase(fetchProductsCategorySearchAsync.pending, state => {
-      return {
-        ...state,
-        loading: true
-      }
-    })
-    builder.addCase(fetchProductsCategorySearchAsync.rejected, (state, action) => {
+    builder.addCase(fetchProductsCategoryAllAsync.rejected, (state, action) => {
       return {
         ...state,
         loading: false,
