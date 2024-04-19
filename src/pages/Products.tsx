@@ -55,6 +55,7 @@ const Products = () => {
   numberOfPages = numberOfPages === 0 ? 1 : numberOfPages
 
   const handleSearch = ({ searchValue, minPrice, maxPrice }: { searchValue: string, minPrice: number, maxPrice: number}) => {
+    setPage(1)
     fetchProducts(searchValue, minPrice, maxPrice)
   }
 

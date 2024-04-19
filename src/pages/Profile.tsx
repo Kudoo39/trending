@@ -6,6 +6,8 @@ import Button from '@mui/material/Button'
 import CircularProgress from '@mui/material/CircularProgress'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
+import List from '@mui/material/List'
+import ListItem from '@mui/material/ListItem'
 import { authenticateUserAsync, logout } from '../redux/slices/userSlice'
 import { AppState, useAppDispatch } from '../redux/store'
 import { OrderProductsType } from '../misc/type'
@@ -13,18 +15,25 @@ import Card from '@mui/material/Card/Card'
 import UpdateUser from '../components/user/UpdateUser'
 import UpdateEmail from '../components/user/UpdateEmail'
 import UpdatePassword from '../components/user/UpdatePassword'
+import { fetchProductsAsync } from '../redux/slices/productSlice'
 
 const Profile = () => {
+  const allProducts = useSelector((state: AppState) => state.products.products)
   const user = useSelector((state: AppState) => state.users.user)
   const loading = useSelector((state: AppState) => state.users.loading)
   const error = useSelector((state: AppState) => state.users.error)
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const userDispatch = useDispatch()
+  const [tab, setTab] = useState('profile')
 
   const handleLogout = () => {
     userDispatch(logout())
   }
+
+  useEffect(() => {
+    dispatch(fetchProductsAsync())
+  }, [dispatch])
 
   useEffect(() => {
     const accessToken = localStorage.getItem('token')
@@ -34,8 +43,6 @@ const Profile = () => {
       navigate('/login')
     }
   }, [dispatch, navigate, user])
-
-  const [tab, setTab] = useState('profile')
 
   if (loading) {
     return (
@@ -85,17 +92,21 @@ const Profile = () => {
       {tab === 'orders' && user && (
         <Card sx={{ maxWidth: 500, width: '100%', border: '1px solid #ddd', borderRadius: '8px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)', padding: 2 }}>
           <Box>
-            <Typography variant="h4">Your Orders:</Typography>
+            <Typography variant="h4" sx={{ borderBottom: '2px solid #ccc', marginBottom: 1 }} >Your Orders</Typography>
             {user.orders.map((order: OrderProductsType, index: number) => (
               <Box key={order._id} sx={{ marginBottom: 2 }}>
                 <Typography variant="subtitle1">Order {index + 1}:</Typography>
-                <ul>
-                  {order.products.map(product => (
-                    <li key={product._id}>
-                      {product.quantity} x {product.productId}
-                    </li>
-                  ))}
-                </ul>
+                <List sx={{ listStyleType: 'none' }}>
+                  {order.products.map(product => {
+                    const matchedProduct = allProducts.find(p => p._id === product.productId)
+                    return (
+                      <ListItem key={product._id} sx={{ border: '1px solid #ccc', borderRadius: '4px', padding: '8px', marginBottom: '4px' }}>
+                        {product.quantity} x {matchedProduct?.title} - €{matchedProduct?.price}
+                      </ListItem>
+                    )
+                  }
+                  )}
+                </List>
               </Box>
             ))}
           </Box>
