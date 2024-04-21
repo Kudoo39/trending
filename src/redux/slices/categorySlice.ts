@@ -3,8 +3,9 @@ import axios, { AxiosError } from 'axios'
 
 import { ALL_CATEGORY_ID } from '../../misc/constants'
 import { RealCategory } from '../../misc/type'
+import { categoryEndpoints } from '../../config/config'
 
-const realUrl = 'http://localhost:8080/api/v1/categories'
+const realUrl = categoryEndpoints.categories
 
 type InitialState = {
   categories: RealCategory[]

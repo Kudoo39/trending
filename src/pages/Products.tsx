@@ -14,11 +14,11 @@ import CircularProgress from '@mui/material/CircularProgress'
 import Pagination from '@mui/material/Pagination'
 import Typography from '@mui/material/Typography'
 import defaultImage from '../assets/images/default_image.jpg'
-import Categories from '../components/Categories'
-import ScrollUpButton from '../components/ScrollUpButton'
-import SortPrice from '../components/SortPrice'
+import Categories from '../components/categories/Categories'
+import ScrollUpButton from '../components/scrollUpButton/ScrollUpButton'
+import SortPrice from '../components/sortPrice/SortPrice'
 import CreateProduct from '../components/product/CreateProduct'
-import Search from '../components/Search'
+import Search from '../components/search/Search'
 import { Sort, ProductRealType } from '../misc/type'
 import { addToCart } from '../redux/slices/cartSlice'
 import {
@@ -168,7 +168,7 @@ const Products = () => {
                     image={checkImage(cleanImage(product.image)) ? cleanImage(product.image) : defaultImage}
                     sx={{ height: 300, objectFit: 'cover' }}
                   />
-                  <CardContent>
+                  <CardContent sx={{ minHeight: '160px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                     <Typography gutterBottom variant="h6" component="h2">
                       {product.title}
                     </Typography>

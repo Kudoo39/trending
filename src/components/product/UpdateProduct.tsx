@@ -1,5 +1,5 @@
 import { useFormik } from 'formik'
-import { useState, memo } from 'react'
+import { useState, memo, useEffect } from 'react'
 import * as Yup from 'yup'
 import { useSelector } from 'react-redux'
 
@@ -11,27 +11,34 @@ import Modal from '@mui/material/Modal'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import CircularProgress from '@mui/material/CircularProgress'
-import { fetchSingleProductAsync, updateProductAsync } from '../../redux/slices/productSlice'
+import { fetchProductsAsync, fetchSingleProductAsync, updateProductAsync } from '../../redux/slices/productSlice'
 import { AppState, useAppDispatch } from '../../redux/store'
 import { UpdateProductType } from '../../misc/type'
+import { ALL_CATEGORY_ID } from '../../misc/constants'
+import Select from '@mui/material/Select/Select'
+import MenuItem from '@mui/material/MenuItem/MenuItem'
+import FormHelperText from '@mui/material/FormHelperText/FormHelperText'
 
 const UpdateProduct = ({ productId }: {productId: string}) => {
+  const categories = useSelector((state: AppState) => state.categories.categories)
+  const categoryId = categories.length > 0 ? categories[1]._id : ALL_CATEGORY_ID
   const loading = useSelector((state: AppState) => state.products.loading)
   const error = useSelector((state: AppState) => state.products.error)
   const dispatch = useAppDispatch()
   const [openModal, setOpenModal] = useState(false)
-  const product = useSelector((state: AppState) => state.products.product)
 
   const formik = useFormik({
     initialValues: {
-      title: product?.title,
-      price: product?.price,
-      description: product?.description
+      title: '',
+      price: 0,
+      description: '',
+      categoryId: categoryId
     },
     validationSchema: Yup.object({
       title: Yup.string().required('Required'),
       price: Yup.number().positive('Price must be a positive number').required('Required'),
-      description: Yup.string().required('Required')
+      description: Yup.string().required('Required'),
+      categoryId: Yup.string().required('Required')
     }),
     onSubmit: async (data: UpdateProductType, { resetForm }) => {
       const modifiedData = {
@@ -41,6 +48,7 @@ const UpdateProduct = ({ productId }: {productId: string}) => {
       try {
         await dispatch(updateProductAsync(modifiedData))
         await dispatch(fetchSingleProductAsync(String(productId)))
+        await dispatch(fetchProductsAsync())
       } catch (error) {
         return error
       }
@@ -157,6 +165,25 @@ const UpdateProduct = ({ productId }: {productId: string}) => {
               helperText={formik.touched.description && formik.errors.description}
               sx={{ marginBottom: 1, width: '300px' }}
             />
+
+            <Select
+              id="category"
+              name="categoryId"
+              value={formik.values.categoryId}
+              onChange={formik.handleChange}
+              variant="outlined"
+              error={formik.touched.categoryId && Boolean(formik.errors.categoryId)}
+              sx={{ marginTop: 2, width: '300px' }}
+            >
+              {categories.slice(1).map(category => (
+                <MenuItem key={category._id} value={category._id}>
+                  {category.name}
+                </MenuItem>
+              ))}
+            </Select>
+            {formik.touched.categoryId && formik.errors.categoryId && (
+              <FormHelperText error>{formik.errors.categoryId}</FormHelperText>
+            )}
 
             <Button color="success" type="submit" variant="contained" sx={{ marginTop: 2 }}>
               OK

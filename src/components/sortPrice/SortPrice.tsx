@@ -5,7 +5,7 @@ import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
-import { SortProps } from '../misc/type'
+import { SortProps } from '../../misc/type'
 
 const SortPrice = ({ selectedSort, setSelectedSort }: SortProps) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)

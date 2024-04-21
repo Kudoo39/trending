@@ -3,13 +3,12 @@ import axios, { AxiosError } from 'axios'
 import { toast } from 'react-toastify'
 
 import { RealUser, RealUserRegister, UpdatePasswordType, UpdateUserType, UserCredential } from '../../misc/type'
+import { userEndpoints } from '../../config/config'
 
-const realUserUrl = 'http://localhost:8080/api/v1/users'
-
-const realLoginUrl = 'http://localhost:8080/api/v1/users/login'
-
-const realProfileUrl = 'http://localhost:8080/api/v1/users/profile'
-const realProfilePasswordUrl = 'http://localhost:8080/api/v1/users/password'
+const realUserUrl = userEndpoints.user
+const realLoginUrl = userEndpoints.login
+const realProfileUrl = userEndpoints.profile
+const realProfilePasswordUrl = userEndpoints.profilePassword
 
 const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true'
 

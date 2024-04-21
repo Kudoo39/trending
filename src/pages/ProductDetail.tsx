@@ -13,9 +13,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import defaultImage from '../assets/images/default_image.jpg'
-import DeleteProduct from '../components/product/DeleteProduct'
-import UpdateProduct from '../components/product/UpdateProduct'
-import ScrollUpButton from '../components/ScrollUpButton'
+import ScrollUpButton from '../components/scrollUpButton/ScrollUpButton'
 import { ProductRealType } from '../misc/type'
 import { addToCart } from '../redux/slices/cartSlice'
 import { fetchSingleProductAsync } from '../redux/slices/productSlice'
@@ -68,59 +66,64 @@ const ProductDetail = () => {
         <Card
           key={product._id}
           sx={{
-            maxWidth: 500,
+            maxWidth: { xxs: 500, lg: 880 },
             width: '100%',
             border: '1px solid #ddd',
             borderRadius: '8px',
             boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-            padding: 2
+            padding: 2,
+            display: 'flex',
+            flexDirection: { xxs: 'column', lg: 'row' }
           }}
         >
           <CardMedia
             component="img"
             alt="Product Images"
             image={checkImage(cleanImage(product.image)) ? cleanImage(product.image) : defaultImage}
-            sx={{ maxHeight: 400, objectFit: 'cover', borderRadius: '8px 8px 0 0' }}
+            sx={{ maxHeight: 600, objectFit: 'cover', borderRadius: '8px 8px 0 0' }}
           />
+          <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: 2 }}>
+            <Box>
+              <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                Product:{' '}
+                <Typography component="span" sx={{ fontWeight: 'normal' }}>
+                  {product.title}
+                </Typography>
+              </Typography>
+              <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                Price:{' '}
+                <Typography component="span" sx={{ fontWeight: 'normal' }}>
+                  €{product.price}
+                </Typography>
+              </Typography>
+              <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                Category:{' '}
+                <Typography component="span" sx={{ fontWeight: 'normal' }}>
+                  {product.categoryId.name}
+                </Typography>
+              </Typography>
+              <Typography variant="body1" sx={{ fontWeight: 'bold', marginTop: 1 }}>
+                Description:
+              </Typography>
+              <Typography variant="body1" sx={{ fontWeight: 'normal' }}>
+                {product.description}
+              </Typography>
+            </Box>
 
-          <Box sx={{ padding: 2 }}>
-            <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
-              Product:{' '}
-              <Typography component="span" sx={{ fontWeight: 'normal' }}>
-                {product.title}
-              </Typography>
-            </Typography>
-            <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
-              Price:{' '}
-              <Typography component="span" sx={{ fontWeight: 'normal' }}>
-                €{product.price}
-              </Typography>
-            </Typography>
-            <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
-              Category:{' '}
-              <Typography component="span" sx={{ fontWeight: 'normal' }}>
-                {product.categoryId.name}
-              </Typography>
-            </Typography>
-            <Typography variant="body2" sx={{ fontWeight: 'bold', marginTop: 1 }}>
-              Description:
-            </Typography>
-            <Typography variant="body2" sx={{ fontWeight: 'normal' }}>
-              {product.description}
-            </Typography>
-
-            <CardActions sx={{ display: 'flex', justifyContent: 'space-between', marginTop: 2 }}>
-              <IconButton
-                component={RouterLink}
-                to="/products"
-                sx={{ minWidth: 'unset', padding: 0, color: 'inherit' }}
-              >
-                <ReplyIcon sx={{ fontSize: 40 }} />
-              </IconButton>
-              <Button variant="contained" color="primary" onClick={() => handleAddToCart(product)}>
-                Add to cart
-              </Button>
-            </CardActions>
+            <Box sx={{ padding: 2 }}>
+              <CardActions sx={{ display: 'flex', justifyContent: 'space-between', marginTop: 2 }}>
+                <IconButton
+                  component={RouterLink}
+                  to="/products"
+                  sx={{ minWidth: 'unset', padding: 0, color: 'inherit' }}
+                >
+                  <ReplyIcon sx={{ fontSize: 40 }} />
+                </IconButton>
+                <Button variant="contained" color="primary" onClick={() => handleAddToCart(product)}>
+                  Add to cart
+                </Button>
+              </CardActions>
+            </Box>
           </Box>
           <ScrollUpButton />
         </Card>
