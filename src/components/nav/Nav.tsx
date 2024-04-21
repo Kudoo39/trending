@@ -1,4 +1,4 @@
-import React, { useState, memo, useCallback } from 'react'
+import React, { useState, memo, useCallback, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link as RouterLink } from 'react-router-dom'
 
@@ -15,14 +15,16 @@ import MenuItem from '@mui/material/MenuItem'
 import SvgIcon from '@mui/material/SvgIcon'
 import Tooltip from '@mui/material/Tooltip'
 import { useColorScheme } from '@mui/material/styles'
-import { ReactComponent as ShopIcon } from '../assets/icons/shop.svg'
-import { logout } from '../redux/slices/userSlice'
-import { AppState } from '../redux/store'
+import { ReactComponent as ShopIcon } from '../../assets/icons/shop.svg'
+import { authenticateUserAsync, logout } from '../../redux/slices/userSlice'
+import { AppState, useAppDispatch } from '../../redux/store'
 
 const Nav = () => {
+  const user = useSelector((state: AppState) => state.users.user)
   const cartItems = useSelector((state: AppState) => state.cart.cart)
   const authenticate = useSelector((state: AppState) => state.users.isAuthenticated)
-  const dispatch = useDispatch()
+  const navDispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
   const totalItems = cartItems.reduce((total, currentItem) => total + currentItem.quantity, 0)
 
@@ -38,9 +40,16 @@ const Nav = () => {
   }, [])
 
   const handleLogout = useCallback(() => {
-    dispatch(logout())
+    navDispatch(logout())
     setAnchorEl(null)
-  }, [dispatch])
+  }, [navDispatch])
+
+  useEffect(() => {
+    const accessToken = localStorage.getItem('token')
+    if (accessToken && !user) {
+      dispatch(authenticateUserAsync(accessToken))
+    }
+  }, [dispatch, user])
 
   const ModeToggle = () => {
     const { mode, setMode } = useColorScheme()
@@ -117,7 +126,7 @@ const Nav = () => {
             Products
           </Box>
         </Link>
-        <Link component={RouterLink} to="/admin" sx={{ textDecoration: 'none' }}>
+        {user && user.role === 'admin' && <Link component={RouterLink} to="/admin" sx={{ textDecoration: 'none' }}>
           <Box
             sx={{
               'cursor': 'pointer',
@@ -129,6 +138,7 @@ const Nav = () => {
             Admin Dashboard
           </Box>
         </Link>
+        }
       </Box>
 
       <Box sx={{ display: 'flex', alignItems: 'center' }}>

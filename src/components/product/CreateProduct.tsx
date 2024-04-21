@@ -16,10 +16,11 @@ import FormHelperText from '@mui/material/FormHelperText'
 import { createProductsAsync, fetchProductsAsync } from '../../redux/slices/productSlice'
 import { AppState, useAppDispatch } from '../../redux/store'
 import { CreateRealProductType } from '../../misc/type'
+import { ALL_CATEGORY_ID } from '../../misc/constants'
 
 const CreateProduct = () => {
   const categories = useSelector((state: AppState) => state.categories.categories)
-  const categoryId = categories.length > 0 ? categories[1]._id : '661554aa1973ad63139c8602'
+  const categoryId = categories.length > 0 ? categories[1]._id : ALL_CATEGORY_ID
   const dispatch = useAppDispatch()
   const [openModal, setOpenModal] = useState(false)
 
@@ -39,9 +40,6 @@ const CreateProduct = () => {
       image: Yup.string().required('Required')
     }),
     onSubmit: async (data: CreateRealProductType, { resetForm }) => {
-      // const imagesArray = typeof data.image === 'string' ? [data.images] : data.images
-      // const modifiedData = { ...data, images: imagesArray }
-
       try {
         await dispatch(createProductsAsync(data))
         await dispatch(fetchProductsAsync())

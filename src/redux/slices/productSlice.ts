@@ -3,8 +3,9 @@ import { toast } from 'react-toastify'
 import axios, { AxiosError } from 'axios'
 
 import { CreateRealProductType, ProductRealType, UpdateProductType } from '../../misc/type'
+import { productEndpoints } from '../../config/config'
 
-const realUrl = `${process.env.REACT_APP_BASE_URL ?? ''}/products`
+const realUrl = productEndpoints.products
 
 type InitialState = {
   products: ProductRealType[]

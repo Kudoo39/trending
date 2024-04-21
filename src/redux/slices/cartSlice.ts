@@ -3,11 +3,11 @@ import { toast } from 'react-toastify'
 import axios, { AxiosError } from 'axios'
 
 import { CartRealType, OrderProductsType, ProductRealType, UpdateQuantity } from '../../misc/type'
-
+import { cartEndpoints } from '../../config/config'
 
 const cart = JSON.parse(localStorage.getItem('cart') || '[]')
 
-const url = 'http://localhost:8080/api/v1/orders'
+const url = cartEndpoints.carts
 
 type InitialState = {
   cart: CartRealType[]

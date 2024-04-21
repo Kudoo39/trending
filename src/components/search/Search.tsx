@@ -6,7 +6,7 @@ import SearchIcon from '@mui/icons-material/Search'
 import InputAdornment from '@mui/material/InputAdornment'
 import TextField from '@mui/material/TextField'
 import Box from '@mui/material/Box'
-import { SearchProps } from '../misc/type'
+import { SearchProps } from '../../misc/type'
 import Button from '@mui/material/Button/Button'
 
 const Search = ({ searchValue, setSearchValue, minPrice, setMinPrice, maxPrice, setMaxPrice, handleSearch }: SearchProps) => {
