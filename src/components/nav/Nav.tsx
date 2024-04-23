@@ -4,8 +4,6 @@ import { Link as RouterLink } from 'react-router-dom'
 
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
-import LightModeIcon from '@mui/icons-material/LightMode'
-import DarkModeIcon from '@mui/icons-material/DarkMode'
 import Badge from '@mui/material/Badge'
 import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
@@ -14,10 +12,10 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import SvgIcon from '@mui/material/SvgIcon'
 import Tooltip from '@mui/material/Tooltip'
-import { useColorScheme } from '@mui/material/styles'
 import { ReactComponent as ShopIcon } from '../../assets/icons/shop.svg'
 import { authenticateUserAsync, logout } from '../../redux/slices/userSlice'
 import { AppState, useAppDispatch } from '../../redux/store'
+import ModeToggle from '../modeToggle/ModeToggle'
 
 const Nav = () => {
   const user = useSelector((state: AppState) => state.users.user)
@@ -51,19 +49,13 @@ const Nav = () => {
     }
   }, [dispatch, user])
 
-  const ModeToggle = () => {
-    const { mode, setMode } = useColorScheme()
-    return (
-      <IconButton
-        onClick={() => {
-          setMode(mode === 'light' ? 'dark' : 'light')
-        }}
-        sx={{ marginRight: { xxs: '0', xsm: '6px', xs: '12px' }, color: 'text.primary' }}
-      >
-        {mode === 'light' ? <LightModeIcon sx={{ fontSize: '30px' }} /> : <DarkModeIcon sx={{ fontSize: '30px' }} />}
-      </IconButton>
-    )
-  }
+  const isAdmin = user && user.role === 'admin'
+
+  const navItems = [
+    { label: 'Home', to: '/' },
+    { label: 'Products', to: '/products' },
+    { label: 'Admin Dashboard', to: '/admin', adminOnly: true }
+  ]
 
   return (
     <Box
@@ -77,14 +69,7 @@ const Nav = () => {
         borderRadius: '4px'
       }}
     >
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '25px',
-          flexWrap: 'wrap'
-        }}
-      >
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: '25px', flexWrap: 'wrap' }}>
         <Link component={RouterLink} to="/" sx={{ textDecoration: 'none', color: 'inherit' }}>
           <SvgIcon
             component={ShopIcon}
@@ -102,43 +87,23 @@ const Nav = () => {
             }}
           />
         </Link>
-        <Link component={RouterLink} to="/" sx={{ textDecoration: 'none' }}>
-          <Box
-            sx={{
-              'cursor': 'pointer',
-              'fontWeight': '600',
-              'color': 'text.primary',
-              '&:hover': { color: 'text.secondary', fontWeight: 650 }
-            }}
-          >
-            Home
-          </Box>
-        </Link>
-        <Link component={RouterLink} to="/products" sx={{ textDecoration: 'none' }}>
-          <Box
-            sx={{
-              'cursor': 'pointer',
-              'fontWeight': '600',
-              'color': 'text.primary',
-              '&:hover': { color: 'text.secondary', fontWeight: 650 }
-            }}
-          >
-            Products
-          </Box>
-        </Link>
-        {user && user.role === 'admin' && <Link component={RouterLink} to="/admin" sx={{ textDecoration: 'none' }}>
-          <Box
-            sx={{
-              'cursor': 'pointer',
-              'fontWeight': '600',
-              'color': 'text.primary',
-              '&:hover': { color: 'text.secondary', fontWeight: 650 }
-            }}
-          >
-            Admin Dashboard
-          </Box>
-        </Link>
-        }
+
+        {navItems.map((item, index) => (
+          (!item.adminOnly || isAdmin) && (
+            <Link key={index} component={RouterLink} to={item.to} sx={{ textDecoration: 'none', color: 'inherit' }}>
+              <Box
+                sx={{
+                  cursor: 'pointer',
+                  fontWeight: '600',
+                  color: 'text.primary',
+                  '&:hover': { color: 'text.secondary', fontWeight: 650 }
+                }}
+              >
+                {item.label}
+              </Box>
+            </Link>
+          )
+        ))}
       </Box>
 
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
