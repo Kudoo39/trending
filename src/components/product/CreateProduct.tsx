@@ -15,7 +15,7 @@ import MenuItem from '@mui/material/MenuItem'
 import FormHelperText from '@mui/material/FormHelperText'
 import { createProductsAsync, fetchProductsAsync } from '../../redux/slices/productSlice'
 import { AppState, useAppDispatch } from '../../redux/store'
-import { CreateRealProductType } from '../../misc/type'
+import { ManageProductType } from '../../misc/type'
 import { ALL_CATEGORY_ID } from '../../misc/constants'
 
 const CreateProduct = () => {
@@ -27,7 +27,7 @@ const CreateProduct = () => {
   const formik = useFormik({
     initialValues: {
       title: '',
-      price: null,
+      price: 0,
       description: '',
       categoryId: categoryId,
       image: ''
@@ -39,7 +39,7 @@ const CreateProduct = () => {
       categoryId: Yup.string().required('Required'),
       image: Yup.string().required('Required')
     }),
-    onSubmit: async (data: CreateRealProductType, { resetForm }) => {
+    onSubmit: async (data: ManageProductType, { resetForm }) => {
       try {
         await dispatch(createProductsAsync(data))
         await dispatch(fetchProductsAsync())

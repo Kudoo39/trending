@@ -13,7 +13,7 @@ import Typography from '@mui/material/Typography'
 import CircularProgress from '@mui/material/CircularProgress'
 import { fetchProductsAsync, fetchSingleProductAsync, updateProductAsync } from '../../redux/slices/productSlice'
 import { AppState, useAppDispatch } from '../../redux/store'
-import { UpdateProductType } from '../../misc/type'
+import { ManageProductType } from '../../misc/type'
 import { ALL_CATEGORY_ID } from '../../misc/constants'
 import Select from '@mui/material/Select/Select'
 import MenuItem from '@mui/material/MenuItem/MenuItem'
@@ -40,7 +40,7 @@ const UpdateProduct = ({ productId }: {productId: string}) => {
       description: Yup.string().required('Required'),
       categoryId: Yup.string().required('Required')
     }),
-    onSubmit: async (data: UpdateProductType, { resetForm }) => {
+    onSubmit: async (data: ManageProductType, { resetForm }) => {
       const modifiedData = {
         updateProduct: data,
         productId: String(productId)

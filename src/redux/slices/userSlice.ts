@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios, { AxiosError } from 'axios'
 import { toast } from 'react-toastify'
 
-import { RealUser, RealUserRegister, UpdatePasswordType, UpdateUserType, UserCredential } from '../../misc/type'
+import { User, UserRegister, UpdatePasswordType, UpdateUserType, UserCredential } from '../../misc/type'
 import { userEndpoints } from '../../config/config'
 
 const realUserUrl = userEndpoints.user
@@ -13,8 +13,8 @@ const realProfilePasswordUrl = userEndpoints.profilePassword
 const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true'
 
 type InitialState = {
-  user?: RealUser | null
-  users: RealUser[]
+  user?: User | null
+  users: User[]
   loading: boolean
   error: string | null
   isAuthenticated: boolean
@@ -31,7 +31,7 @@ export const fetchUsersAsync = createAsyncThunk(
   'fetchUsersAsync',
   async () => {
     try {
-      const response = await axios.get<RealUser[]>(realUserUrl)
+      const response = await axios.get<User[]>(realUserUrl)
       return response.data
     } catch (e) {
       const error = e as AxiosError
@@ -40,7 +40,7 @@ export const fetchUsersAsync = createAsyncThunk(
   }
 )
 
-export const registerUserAsync = createAsyncThunk('registerUserAsync', async (userData: RealUserRegister) => {
+export const registerUserAsync = createAsyncThunk('registerUserAsync', async (userData: UserRegister) => {
   try {
     const response = await axios.post(realUserUrl, userData)
     toast.success('Account created successfully!', { position: 'bottom-left' })
@@ -76,7 +76,7 @@ export const loginUserAsync = createAsyncThunk(
       localStorage.setItem('token', response.data.token)
 
       const authentication = await dispatch(authenticateUserAsync(response.data.token))
-      return authentication.payload as RealUser
+      return authentication.payload as User
     } catch (e) {
       const error = e as Error
       toast.error('Login failed. Please try again!', { position: 'bottom-left' })
@@ -164,7 +164,7 @@ const userSlice = createSlice({
     builder.addCase(loginUserAsync.fulfilled, (state, action) => {
       return {
         ...state,
-        user: action.payload as RealUser,
+        user: action.payload as User,
         loading: false
       }
     })

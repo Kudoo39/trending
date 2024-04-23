@@ -19,7 +19,7 @@ import ScrollUpButton from '../components/scrollUpButton/ScrollUpButton'
 import SortPrice from '../components/sortPrice/SortPrice'
 import CreateProduct from '../components/product/CreateProduct'
 import Search from '../components/search/Search'
-import { Sort, ProductRealType } from '../misc/type'
+import { Sort, ProductType } from '../misc/type'
 import { addToCart } from '../redux/slices/cartSlice'
 import {
   fetchProductsAllAsync,
@@ -59,7 +59,7 @@ const Products = () => {
     fetchProducts(searchValue, minPrice, maxPrice)
   }
 
-  const handleAddToCart = debounce((product: ProductRealType) => {
+  const handleAddToCart = debounce((product: ProductType) => {
     if (!user) {
       toast.error('Please log in to add item to cart!', { position: 'bottom-left' })
       return <Box>User not found!</Box>
@@ -75,7 +75,7 @@ const Products = () => {
   useEffect(() => {
     fetchProducts(searchValue, minPrice, maxPrice)
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, user, offset, selectedCategory])
+  }, [dispatch, user, offset, selectedCategory, products.length])
 
   const fetchProducts = (searchValue: string, minPrice: number, maxPrice: number) => {
     if (selectedCategory === ALL_CATEGORY_ID) {

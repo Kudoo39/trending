@@ -17,65 +17,29 @@ export type SortProps = {
 }
 
 export type Category = {
-  id: number
+  _id: string
   name: string
   image: string
-}
-
-export type CreateProductType = {
-  title: string
-  price: number | null
-  description: string
-  categoryId: number
-  images: string[]
-}
-
-export type CreateRealProductType = {
-  title: string
-  price: number | null
-  description: string
-  categoryId: string
-  image: string
-}
-
-export type UpdateProductType = {
-  title?: string
-  price?: number
-  description?: string
-  categoryId?: string
-  images?: string[]
 }
 
 export type ProductType = {
-  id: number
-  title: string
-  price: number
-  description: string
-  category: Category
-  images: string[]
-}
-
-export type RealCategory = {
-  _id: string
-  name: string
-  image: string
-}
-
-export type ProductRealType = {
   _id: string
   title: string
   price: number
   description: string
-  size: string
-  categoryId: RealCategory
+  categoryId: Category
   image: string
+}
+
+export type ManageProductType = {
+  title: string
+  price: number
+  description: string
+  categoryId: string
+  image?: string
 }
 
 export type CartType = ProductType & {
-  quantity: number
-}
-
-export type CartRealType = ProductRealType & {
   quantity: number
 }
 
@@ -111,25 +75,15 @@ export type UpdatePasswordType = {
 }
 
 export type UserRegister = UserCredential & {
-  name: string
-  avatar: string
-}
-
-export type RealUserRegister = UserCredential & {
   firstname: string
   lastname: string
   avatar: string
 }
 
-export type RealUser = RealUserRegister & {
+export type User = UserRegister & {
   role: 'customer' | 'admin'
   _id: string
   orders: OrderProductsType[]
   banStatus: boolean
   newPassword?: string
-}
-
-export type User = UserRegister & {
-  role: 'customer' | 'admin'
-  id: number
 }

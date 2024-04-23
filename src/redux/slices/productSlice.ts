@@ -2,15 +2,15 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { toast } from 'react-toastify'
 import axios, { AxiosError } from 'axios'
 
-import { CreateRealProductType, ProductRealType, UpdateProductType } from '../../misc/type'
+import { ManageProductType, ProductType } from '../../misc/type'
 import { productEndpoints } from '../../config/config'
 
 const realUrl = productEndpoints.products
 
 type InitialState = {
-  products: ProductRealType[]
+  products: ProductType[]
   total: number
-  product: ProductRealType | null
+  product: ProductType | null
   loading: boolean
   error: string | null
 }
@@ -25,7 +25,7 @@ const initialState: InitialState = {
 
 type RealUrlResponse = {
   totalProduct: number
-  products: ProductRealType[]
+  products: ProductType[]
 }
 
 export const fetchProductsAsync = createAsyncThunk(
@@ -60,7 +60,7 @@ export const fetchProductsAllAsync = createAsyncThunk(
 
 export const fetchSingleProductAsync = createAsyncThunk('fetchSingleProductAsync', async (_id: string) => {
   try {
-    const response = await axios.get<ProductRealType>(`${realUrl}/${_id}`)
+    const response = await axios.get<ProductType>(`${realUrl}/${_id}`)
     return response.data
   } catch (e) {
     const error = e as Error
@@ -85,7 +85,7 @@ export const fetchProductsCategoryAllAsync = createAsyncThunk(
   }
 )
 
-export const createProductsAsync = createAsyncThunk('createProductsAsync', async (newProduct: CreateRealProductType) => {
+export const createProductsAsync = createAsyncThunk('createProductsAsync', async (newProduct: ManageProductType) => {
   try {
     const response = await axios.post(realUrl, newProduct)
     toast.success('Product added successfully!', { position: 'bottom-left' })
@@ -99,7 +99,7 @@ export const createProductsAsync = createAsyncThunk('createProductsAsync', async
 
 export const updateProductAsync = createAsyncThunk(
   'updateProductAsync',
-  async ({ updateProduct, productId }: { updateProduct: UpdateProductType; productId: string }) => {
+  async ({ updateProduct, productId }: { updateProduct: ManageProductType; productId: string }) => {
     try {
       const response = await axios.put(`${realUrl}/${productId}`, updateProduct)
       toast.success('Product updated successfully!', { position: 'bottom-left' })
