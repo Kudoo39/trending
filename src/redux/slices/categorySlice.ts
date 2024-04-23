@@ -2,13 +2,13 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import axios, { AxiosError } from 'axios'
 
 import { ALL_CATEGORY_ID } from '../../misc/constants'
-import { RealCategory } from '../../misc/type'
+import { Category } from '../../misc/type'
 import { categoryEndpoints } from '../../config/config'
 
 const realUrl = categoryEndpoints.categories
 
 type InitialState = {
-  categories: RealCategory[]
+  categories: Category[]
   selectedCategory: string
   loading: boolean
   error: string | null
@@ -23,7 +23,7 @@ const initialState: InitialState = {
 
 export const fetchCategoriesAsync = createAsyncThunk('fetchCategoriesAsync', async () => {
   try {
-    const response = await axios.get<RealCategory[]>(realUrl)
+    const response = await axios.get<Category[]>(realUrl)
     return response.data
   } catch (e) {
     const error = e as AxiosError

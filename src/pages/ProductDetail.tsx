@@ -14,7 +14,7 @@ import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import defaultImage from '../assets/images/default_image.jpg'
 import ScrollUpButton from '../components/scrollUpButton/ScrollUpButton'
-import { ProductRealType } from '../misc/type'
+import { ProductType } from '../misc/type'
 import { addToCart } from '../redux/slices/cartSlice'
 import { fetchSingleProductAsync } from '../redux/slices/productSlice'
 import { AppState, useAppDispatch } from '../redux/store'
@@ -44,7 +44,7 @@ const ProductDetail = () => {
     }
   }, [dispatch, navigate, user])
 
-  const handleAddToCart = debounce((product: ProductRealType) => {
+  const handleAddToCart = debounce((product: ProductType) => {
     cartDispatch(addToCart(product))
   }, 300)
 

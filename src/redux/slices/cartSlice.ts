@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { toast } from 'react-toastify'
 import axios, { AxiosError } from 'axios'
 
-import { CartRealType, OrderProductsType, ProductRealType, UpdateQuantity } from '../../misc/type'
+import { CartType, OrderProductsType, ProductType, UpdateQuantity } from '../../misc/type'
 import { cartEndpoints } from '../../config/config'
 
 const cart = JSON.parse(localStorage.getItem('cart') || '[]')
@@ -10,8 +10,8 @@ const cart = JSON.parse(localStorage.getItem('cart') || '[]')
 const url = cartEndpoints.carts
 
 type InitialState = {
-  cart: CartRealType[]
-  orders: CartRealType[]
+  cart: CartType[]
+  orders: CartType[]
   loading: boolean
   error: string | null
 }
@@ -50,7 +50,7 @@ const cartSlice = createSlice({
   name: 'cart',
   initialState,
   reducers: {
-    addToCart: (state, action: PayloadAction<ProductRealType>) => {
+    addToCart: (state, action: PayloadAction<ProductType>) => {
       const existingItem = state.cart.find(item => item._id === action.payload._id)
       if (existingItem) {
         existingItem.quantity += 1
