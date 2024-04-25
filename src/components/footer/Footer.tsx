@@ -3,6 +3,13 @@ import { memo } from 'react'
 import Typography from '@mui/material/Typography'
 import Link from '@mui/material/Link'
 import Box from '@mui/material/Box'
+import { FaLinkedinIn, FaGithub, FaSuitcase } from 'react-icons/fa'
+
+const media = [
+  { link: 'https://www.linkedin.com/in/khang-nguyen3902/', icon: FaLinkedinIn },
+  { link: 'https://github.com/Kudoo39/', icon: FaGithub },
+  { link: 'https://kudoo39.github.io/react-portfolio/', icon: FaSuitcase }
+]
 
 const Footer = () => {
   return (
@@ -15,18 +22,6 @@ const Footer = () => {
         width: '100%'
       }}
     >
-      <Typography variant="body2" sx={{ fontWeight: 'bold', marginBottom: '20px' }}>
-        Data provided by{' '}
-        <Link
-          href="https://fakeapi.platzi.com/"
-          target="_blank"
-          rel="noreferrer"
-          color="secondary"
-          sx={{ 'textDecoration': 'none', 'listStyle': 'none', '&:hover': { color: '#255c99' } }}
-        >
-          Platzi Fake Store API
-        </Link>
-      </Typography>
       <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
         © 2024 -{' '}
         <Link
@@ -38,6 +33,20 @@ const Footer = () => {
           Khang Nguyen
         </Link>
       </Typography>
+      <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+        {media.map((item, index) => (
+          <Link
+            key={index}
+            href={item.link}
+            target="_blank"
+            rel="noreferrer"
+            sx={{ 'fontSize': '26px', 'textDecoration': 'none', 'listStyle': 'none', '&:hover': { color: '#255c99' }, margin: '2px 12px' }}
+            color="text.primary"
+          >
+            <item.icon />
+          </Link>
+        ))}
+      </Box>
     </Box>
   )
 }
