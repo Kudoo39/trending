@@ -18,6 +18,8 @@ import { ALL_CATEGORY_ID } from '../../misc/constants'
 import Select from '@mui/material/Select/Select'
 import MenuItem from '@mui/material/MenuItem/MenuItem'
 import FormHelperText from '@mui/material/FormHelperText/FormHelperText'
+import { CenteredBox } from '../../styled-components/Box'
+import { ConfirmedButton } from '../../styled-components/Button'
 
 const UpdateProduct = ({ productId }: {productId: string}) => {
   const categories = useSelector((state: AppState) => state.categories.categories)
@@ -67,9 +69,9 @@ const UpdateProduct = ({ productId }: {productId: string}) => {
 
   if (loading) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+      <CenteredBox sx={{ height: '100vh' }}>
         <CircularProgress />
-      </Box>
+      </CenteredBox>
     )
   }
 
@@ -185,9 +187,9 @@ const UpdateProduct = ({ productId }: {productId: string}) => {
               <FormHelperText error>{formik.errors.categoryId}</FormHelperText>
             )}
 
-            <Button color="success" type="submit" variant="contained" sx={{ marginTop: 2 }}>
+            <ConfirmedButton color="success" type="submit" variant="contained">
               OK
-            </Button>
+            </ConfirmedButton>
           </FormControl>
         </Box>
       </Modal>

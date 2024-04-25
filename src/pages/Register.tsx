@@ -4,12 +4,12 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom'
 
 import TextField from '@mui/material/TextField'
 import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
 import FormControl from '@mui/material/FormControl'
 import Link from '@mui/material/Link'
 import Typography from '@mui/material/Typography'
 import { registerUserAsync } from '../redux/slices/userSlice'
 import { useAppDispatch } from '../redux/store'
+import { SubmittedButton } from '../styled-components/Button'
 
 const Register = () => {
   const navigate = useNavigate()
@@ -152,9 +152,9 @@ const Register = () => {
           sx={{ marginBottom: 1, width: '300px' }}
         />
 
-        <Button type="submit" variant="contained" sx={{ width: '300px', marginTop: 2 }}>
+        <SubmittedButton type="submit" variant="contained" sx={{ width: '300px', marginTop: 2 }}>
           Register
-        </Button>
+        </SubmittedButton>
       </FormControl>
       <Link component={RouterLink} to="/login" sx={{ marginTop: 2, paddingBottom: 4 }}>
         Log in to your account!

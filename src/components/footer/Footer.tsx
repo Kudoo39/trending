@@ -4,6 +4,7 @@ import Typography from '@mui/material/Typography'
 import Link from '@mui/material/Link'
 import Box from '@mui/material/Box'
 import { FaLinkedinIn, FaGithub, FaSuitcase } from 'react-icons/fa'
+import { CenteredBox } from '../../styled-components/Box'
 
 const media = [
   { link: 'https://www.linkedin.com/in/khang-nguyen3902/', icon: FaLinkedinIn },
@@ -33,7 +34,7 @@ const Footer = () => {
           Khang Nguyen
         </Link>
       </Typography>
-      <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+      <CenteredBox sx={{ marginTop: '20px' }}>
         {media.map((item, index) => (
           <Link
             key={index}
@@ -46,7 +47,7 @@ const Footer = () => {
             <item.icon />
           </Link>
         ))}
-      </Box>
+      </CenteredBox>
     </Box>
   )
 }

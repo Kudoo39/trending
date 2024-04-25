@@ -4,7 +4,6 @@ import * as Yup from 'yup'
 import { useDispatch, useSelector } from 'react-redux'
 
 import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import BorderColorIcon from '@mui/icons-material/BorderColor'
 import CircularProgress from '@mui/material/CircularProgress'
@@ -15,6 +14,8 @@ import { logout, updateUserProfileAsync } from '../../redux/slices/userSlice'
 import { AppState, useAppDispatch } from '../../redux/store'
 import { UpdateUserType } from '../../misc/type'
 import { toast } from 'react-toastify'
+import { CenteredBox } from '../../styled-components/Box'
+import { ConfirmedButton } from '../../styled-components/Button'
 
 const UpdateEmail = () => {
   const dispatch = useAppDispatch()
@@ -58,9 +59,9 @@ const UpdateEmail = () => {
 
   if (loading) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+      <CenteredBox sx={{ height: '100vh' }}>
         <CircularProgress />
-      </Box>
+      </CenteredBox>
     )
   }
 
@@ -105,9 +106,9 @@ const UpdateEmail = () => {
               sx={{ marginBottom: 1, width: '240px' }}
             />
 
-            <Button color="success" type="submit" variant="contained" sx={{ marginTop: 2 }}>
+            <ConfirmedButton color="success" type="submit" variant="contained">
             OK
-            </Button>
+            </ConfirmedButton>
           </FormControl>
         </Box>
       </Modal>

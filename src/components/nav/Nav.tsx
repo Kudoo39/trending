@@ -16,6 +16,7 @@ import { ReactComponent as ShopIcon } from '../../assets/icons/shop.svg'
 import { authenticateUserAsync, logout } from '../../redux/slices/userSlice'
 import { AppState, useAppDispatch } from '../../redux/store'
 import ModeToggle from '../modeToggle/ModeToggle'
+import { CenteredBox } from '../../styled-components/Box'
 
 const Nav = () => {
   const user = useSelector((state: AppState) => state.users.user)
@@ -106,7 +107,7 @@ const Nav = () => {
         ))}
       </Box>
 
-      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+      <CenteredBox>
         <ModeToggle />
         <Tooltip title="Carts">
           <Badge badgeContent={totalItems} color="primary">
@@ -152,7 +153,7 @@ const Nav = () => {
             </Link>
           )}
         </Menu>
-      </Box>
+      </CenteredBox>
     </Box>
   )
 }

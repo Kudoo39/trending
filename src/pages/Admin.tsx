@@ -20,6 +20,7 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 import { fetchUsersAsync } from '../redux/slices/userSlice'
 import UpdateProduct from '../components/product/UpdateProduct'
 import DeleteProduct from '../components/product/DeleteProduct'
+import { CenteredBox } from '../styled-components/Box'
 
 const Admin = () => {
   const dispatch = useAppDispatch()
@@ -36,9 +37,9 @@ const Admin = () => {
 
   if (loading) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+      <CenteredBox sx={{ height: '100vh' }}>
         <CircularProgress />
-      </Box>
+      </CenteredBox>
     )
   }
 

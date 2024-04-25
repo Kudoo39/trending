@@ -21,6 +21,7 @@ import { AppState, useAppDispatch } from '../redux/store'
 import { checkImage } from '../utils/checkImage'
 import { cleanImage } from '../utils/cleanImage'
 import { authenticateUserAsync } from '../redux/slices/userSlice'
+import { CenteredBox } from '../styled-components/Box'
 
 const ProductDetail = () => {
   const user = useSelector((state: AppState) => state.users.user)
@@ -50,9 +51,9 @@ const ProductDetail = () => {
 
   if (loading) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+      <CenteredBox sx={{ height: '100vh' }}>
         <CircularProgress size={80} />
-      </Box>
+      </CenteredBox>
     )
   }
 
@@ -61,7 +62,7 @@ const ProductDetail = () => {
   }
 
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
+    <CenteredBox sx={{ minHeight: '100vh' }}>
       {product ? (
         <Card
           key={product._id}
@@ -130,7 +131,7 @@ const ProductDetail = () => {
       ) : (
         <Box>Product not found</Box>
       )}
-    </Box>
+    </CenteredBox>
   )
 }
 

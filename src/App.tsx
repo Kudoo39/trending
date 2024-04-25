@@ -20,9 +20,9 @@ const App = () => {
   const user = useSelector((state: AppState) => state.users.user)
 
   return (
-    <Box style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <Nav />
-      <Box style={{ flex: '1' }}>
+      <Box sx={{ flex: '1' }}>
         <Routes>
           <Route path="/" element={<Home />}></Route>
           <Route path="/products" element={<Product />}></Route>

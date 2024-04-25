@@ -31,6 +31,7 @@ import { checkImage } from '../utils/checkImage'
 import { cleanImage } from '../utils/cleanImage'
 import { sortByHighest, sortByLowest } from '../utils/sort'
 import { ALL_CATEGORY_ID } from '../misc/constants'
+import { CenteredBox } from '../styled-components/Box'
 
 const Products = () => {
   const [selectedSort, setSelectedSort] = useState<Sort>('Default')
@@ -108,9 +109,9 @@ const Products = () => {
 
   if (loading) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+      <CenteredBox sx={{ height: '100vh' }}>
         <CircularProgress size={80} />
-      </Box>
+      </CenteredBox>
     )
   }
 
