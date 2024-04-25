@@ -4,6 +4,7 @@ import axios, { AxiosError } from 'axios'
 
 import { ManageProductType, ProductType } from '../../misc/type'
 import { productEndpoints } from '../../config/config'
+import { fetchData } from '../../utils/fetchData'
 
 const realUrl = productEndpoints.products
 
@@ -31,57 +32,31 @@ type RealUrlResponse = {
 export const fetchProductsAsync = createAsyncThunk(
   'fetchProductsAsync',
   async () => {
-    try {
-      const response = await axios.get<RealUrlResponse>(realUrl)
-      return response.data
-    } catch (e) {
-      const error = e as AxiosError
-      return error
-    }
+    return fetchData<RealUrlResponse>(realUrl)
   }
 )
 
 export const fetchProductsAllAsync = createAsyncThunk(
   'fetchProductsAllAsync',
   async ({ searchQuery, minPrice, maxPrice, offset, limit }: { searchQuery: string; minPrice: number; maxPrice: number; offset: number; limit: number }) => {
-    try {
-      if (searchQuery === '') {
-        const response = await axios.get<RealUrlResponse>(`${realUrl}?minPrice=${minPrice}&&maxPrice=${maxPrice}&&offset=${offset}&&limit=${limit}`)
-        return response.data
-      }
-      const response = await axios.get<RealUrlResponse>(`${realUrl}?searchQuery=${searchQuery}&&minPrice=${minPrice}&&maxPrice=${maxPrice}&&offset=${offset}&&limit=${limit}`)
-      return response.data
-    } catch (e) {
-      const error = e as AxiosError
-      return error
+    if (searchQuery === '') {
+      return fetchData<RealUrlResponse>(`${realUrl}?minPrice=${minPrice}&&maxPrice=${maxPrice}&&offset=${offset}&&limit=${limit}`)
     }
+    return fetchData<RealUrlResponse>(`${realUrl}?searchQuery=${searchQuery}&&minPrice=${minPrice}&&maxPrice=${maxPrice}&&offset=${offset}&&limit=${limit}`)
   }
 )
 
 export const fetchSingleProductAsync = createAsyncThunk('fetchSingleProductAsync', async (_id: string) => {
-  try {
-    const response = await axios.get<ProductType>(`${realUrl}/${_id}`)
-    return response.data
-  } catch (e) {
-    const error = e as Error
-    return error
-  }
+  return fetchData<ProductType>(`${realUrl}/${_id}`)
 })
 
 export const fetchProductsCategoryAllAsync = createAsyncThunk(
   'fetchProductsCategoryAllAsync',
   async ({ categoryId, searchQuery, minPrice, maxPrice, offset, limit }: { categoryId: string; searchQuery: string; minPrice: number; maxPrice: number; offset: number; limit: number }) => {
-    try {
-      if (searchQuery === '') {
-        const response = await axios.get<RealUrlResponse>(`${realUrl}/category/${categoryId}?minPrice=${minPrice}&&maxPrice=${maxPrice}&&offset=${offset}&&limit=${limit}`)
-        return response.data
-      }
-      const response = await axios.get<RealUrlResponse>(`${realUrl}/category/${categoryId}?searchQuery=${searchQuery}&&minPrice=${minPrice}&&maxPrice=${maxPrice}&&offset=${offset}&&limit=${limit}`)
-      return response.data
-    } catch (e) {
-      const error = e as AxiosError
-      return error
+    if (searchQuery === '') {
+      return fetchData<RealUrlResponse>(`${realUrl}/category/${categoryId}?minPrice=${minPrice}&&maxPrice=${maxPrice}&&offset=${offset}&&limit=${limit}`)
     }
+    return fetchData<RealUrlResponse>(`${realUrl}/category/${categoryId}?searchQuery=${searchQuery}&&minPrice=${minPrice}&&maxPrice=${maxPrice}&&offset=${offset}&&limit=${limit}`)
   }
 )
 

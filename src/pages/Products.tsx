@@ -38,6 +38,7 @@ const Products = () => {
   const [minPrice, setMinPrice] = useState(0)
   const [maxPrice, setMaxPrice] = useState(10000)
   const [page, setPage] = useState(1)
+  const [prevCategory, setPrevCategory] = useState<string | null>(null)
   const productsPerPage = 8
 
   const user = useSelector((state: AppState) => state.users.user)
@@ -78,6 +79,10 @@ const Products = () => {
   }, [dispatch, user, offset, selectedCategory, products.length])
 
   const fetchProducts = (searchValue: string, minPrice: number, maxPrice: number) => {
+    if (selectedCategory !== prevCategory) {
+      setPrevCategory(selectedCategory)
+      setPage(1)
+    }
     if (selectedCategory === ALL_CATEGORY_ID) {
       dispatch(fetchProductsAllAsync({ searchQuery: searchValue, minPrice, maxPrice, offset, limit }))
     } else {

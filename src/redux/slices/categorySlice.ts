@@ -4,6 +4,7 @@ import axios, { AxiosError } from 'axios'
 import { ALL_CATEGORY_ID } from '../../misc/constants'
 import { Category } from '../../misc/type'
 import { categoryEndpoints } from '../../config/config'
+import { fetchData } from '../../utils/fetchData'
 
 const realUrl = categoryEndpoints.categories
 
@@ -22,13 +23,7 @@ const initialState: InitialState = {
 }
 
 export const fetchCategoriesAsync = createAsyncThunk('fetchCategoriesAsync', async () => {
-  try {
-    const response = await axios.get<Category[]>(realUrl)
-    return response.data
-  } catch (e) {
-    const error = e as AxiosError
-    return error
-  }
+  return fetchData<Category[]>(realUrl)
 })
 
 const categorySlice = createSlice({
