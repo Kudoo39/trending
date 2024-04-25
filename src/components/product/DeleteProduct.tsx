@@ -11,6 +11,7 @@ import Modal from '@mui/material/Modal'
 import Typography from '@mui/material/Typography'
 import { deleteProductAsync, fetchProductsAsync } from '../../redux/slices/productSlice'
 import { AppState, useAppDispatch } from '../../redux/store'
+import { CenteredBox } from '../../styled-components/Box'
 
 const DeleteProduct = ({ productId }: {productId: string}) => {
   const loading = useSelector((state: AppState) => state.products.loading)
@@ -40,9 +41,9 @@ const DeleteProduct = ({ productId }: {productId: string}) => {
 
   if (loading) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+      <CenteredBox sx={{ height: '100vh' }}>
         <CircularProgress />
-      </Box>
+      </CenteredBox>
     )
   }
 

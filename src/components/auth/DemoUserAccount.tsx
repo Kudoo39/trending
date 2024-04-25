@@ -4,12 +4,12 @@ import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
 import FormControl from '@mui/material/FormControl'
 import Typography from '@mui/material/Typography'
 import { UserCredential } from '../../misc/type'
 import { loginUserAsync } from '../../redux/slices/userSlice'
 import { AppState, useAppDispatch } from '../../redux/store'
+import { SubmittedButton } from '../../styled-components/Button'
 
 const DemoUserAccount = () => {
   const loading = useSelector((state: AppState) => state.users.loading)
@@ -36,16 +36,15 @@ const DemoUserAccount = () => {
         onSubmit={formik.handleSubmit}
         sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
       >
-        <Button
+        <SubmittedButton
           type="submit"
           fullWidth
           variant="outlined"
           color="primary"
-          sx={{ marginTop: 1, width: '300px' }}
           disabled={loading}
         >
           {loading ? 'Loading...' : 'Log In As A Guest'}
-        </Button>
+        </SubmittedButton>
         {error && <Typography sx={{ color: 'red', marginTop: 1 }}>{error}</Typography>}
       </FormControl>
     </Box>

@@ -14,6 +14,7 @@ import Modal from '@mui/material/Modal/Modal'
 import { authenticateUserAsync, updateUserPasswordAsync } from '../../redux/slices/userSlice'
 import { AppState, useAppDispatch } from '../../redux/store'
 import { UpdatePasswordType } from '../../misc/type'
+import { CenteredBox } from '../../styled-components/Box'
 
 const UpdatePassword = () => {
   const dispatch = useAppDispatch()
@@ -58,9 +59,9 @@ const UpdatePassword = () => {
 
   if (loading) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+      <CenteredBox sx={{ height: '100vh' }}>
         <CircularProgress />
-      </Box>
+      </CenteredBox>
     )
   }
 

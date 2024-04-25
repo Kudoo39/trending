@@ -11,11 +11,11 @@ import ListItem from '@mui/material/ListItem'
 import { authenticateUserAsync, logout } from '../redux/slices/userSlice'
 import { AppState, useAppDispatch } from '../redux/store'
 import { OrderProductsType } from '../misc/type'
-import Card from '@mui/material/Card/Card'
 import UpdateUser from '../components/user/UpdateUser'
 import UpdateEmail from '../components/user/UpdateEmail'
 import UpdatePassword from '../components/user/UpdatePassword'
 import { fetchProductsAsync } from '../redux/slices/productSlice'
+import { ProfileCard } from '../styled-components/Card'
 
 const Profile = () => {
   const allProducts = useSelector((state: AppState) => state.products.products)
@@ -63,7 +63,7 @@ const Profile = () => {
         <Button variant={tab === 'orders' ? 'contained' : 'outlined'} onClick={() => setTab('orders')}>Orders</Button>
       </Box>
       {tab === 'profile' && user && (
-        <Card sx={{ maxWidth: 500, width: '100%', border: '1px solid #ddd', borderRadius: '8px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)', padding: 2 }}>
+        <ProfileCard>
           <Box sx={{ margin: '8px 0 8px 0' }}>
             <img src={user.avatar} alt="Avatar" style={{ width: 120, height: 120, borderRadius: '50%' }} />
           </Box>
@@ -87,10 +87,10 @@ const Profile = () => {
             </Button>
             <UpdatePassword />
           </Box>
-        </Card>
+        </ProfileCard>
       )}
       {tab === 'orders' && user && (
-        <Card sx={{ maxWidth: 500, width: '100%', border: '1px solid #ddd', borderRadius: '8px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)', padding: 2 }}>
+        <ProfileCard>
           <Box>
             <Typography variant="h4" sx={{ borderBottom: '2px solid #ccc', marginBottom: 1 }} >Your Orders</Typography>
             {user.orders.map((order: OrderProductsType, index: number) => (
@@ -110,7 +110,7 @@ const Profile = () => {
               </Box>
             ))}
           </Box>
-        </Card>
+        </ProfileCard>
       )}
     </Box>
   )

@@ -19,7 +19,7 @@ import { AppState, useAppDispatch } from '../redux/store'
 import { checkImage } from '../utils/checkImage'
 import { cleanImage } from '../utils/cleanImage'
 import { authenticateUserAsync } from '../redux/slices/userSlice'
-
+import { CartBox } from '../styled-components/Box'
 
 const Cart = () => {
   const user = useSelector((state: AppState) => state.users.user)
@@ -171,31 +171,31 @@ const Cart = () => {
         <Typography variant="h5" sx={{ fontWeight: 'bold', marginBottom: '10px', color: '#333' }}>
           ORDER SUMMARY
         </Typography>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+        <CartBox>
           <Typography variant="body1" sx={{ color: '#555' }}>
             Total:
           </Typography>
           <Typography variant="body1" sx={{ color: '#333' }}>
             €{totalPrice.toFixed(2)}
           </Typography>
-        </Box>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+        </CartBox>
+        <CartBox>
           <Typography variant="body1" sx={{ color: '#555' }}>
             Estimate Shipping:
           </Typography>
           <Typography variant="body1" sx={{ color: '#333' }}>
             €0.00
           </Typography>
-        </Box>
+        </CartBox>
         <Divider sx={{ marginY: '10px', backgroundColor: '#ccc' }} />
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+        <CartBox>
           <Typography variant="body1" sx={{ fontWeight: 'bold', color: '#555' }}>
             Subtotal:
           </Typography>
           <Typography variant="body1" sx={{ fontWeight: 'bold', color: '#333' }}>
             €{totalPrice.toFixed(2)}
           </Typography>
-        </Box>
+        </CartBox>
         <Button
           variant="contained"
           color="primary"

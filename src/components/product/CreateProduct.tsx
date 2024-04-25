@@ -17,6 +17,7 @@ import { createProductsAsync, fetchProductsAsync } from '../../redux/slices/prod
 import { AppState, useAppDispatch } from '../../redux/store'
 import { ManageProductType } from '../../misc/type'
 import { ALL_CATEGORY_ID } from '../../misc/constants'
+import { SubmittedButton } from '../../styled-components/Button'
 
 const CreateProduct = () => {
   const categories = useSelector((state: AppState) => state.categories.categories)
@@ -163,9 +164,9 @@ const CreateProduct = () => {
               sx={{ marginTop: 3, width: '300px' }}
             />
 
-            <Button type="submit" variant="contained" sx={{ width: '300px', marginTop: 2 }}>
+            <SubmittedButton type="submit" variant="contained">
               Create
-            </Button>
+            </SubmittedButton>
           </FormControl>
         </Box>
       </Modal>
