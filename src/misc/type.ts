@@ -66,6 +66,7 @@ export type UpdateUserType = {
   firstname?: string
   lastname?: string
   email?: string
+  avatar?: string
 }
 
 export type UpdatePasswordType = {

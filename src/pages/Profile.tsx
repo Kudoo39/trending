@@ -14,8 +14,10 @@ import { OrderProductsType } from '../misc/type'
 import UpdateUser from '../components/user/UpdateUser'
 import UpdateEmail from '../components/user/UpdateEmail'
 import UpdatePassword from '../components/user/UpdatePassword'
+import UpdateAvatar from '../components/user/UpdateAvatar'
 import { fetchProductsAsync } from '../redux/slices/productSlice'
 import { ProfileCard } from '../styled-components/Card'
+import { Avatar, ListItemAvatar, ListItemText } from '@mui/material'
 
 const Profile = () => {
   const allProducts = useSelector((state: AppState) => state.products.products)
@@ -64,8 +66,9 @@ const Profile = () => {
       </Box>
       {tab === 'profile' && user && (
         <ProfileCard>
-          <Box sx={{ margin: '8px 0 8px 0' }}>
-            <img src={user.avatar} alt="Avatar" style={{ width: 120, height: 120, borderRadius: '50%' }} />
+          <Box sx={{ display: 'flex', margin: '8px 0 8px 0' }}>
+            <Avatar src={user.avatar} alt="Avatar" sx={{ width: 120, height: 120, borderRadius: '50%' }}/>
+            <UpdateAvatar />
           </Box>
           <Box sx={{ marginBottom: 2 }}>
             <Box sx={{ display: 'flex', flexDirection: 'row' }}>
@@ -92,16 +95,34 @@ const Profile = () => {
       {tab === 'orders' && user && (
         <ProfileCard>
           <Box>
-            <Typography variant="h4" sx={{ borderBottom: '2px solid #ccc', marginBottom: 1 }} >Your Orders</Typography>
+            <Typography variant="h4" sx={{ marginBottom: 1 }} >Your Orders</Typography>
             {user.orders.map((order: OrderProductsType, index: number) => (
               <Box key={order._id} sx={{ marginBottom: 2 }}>
-                <Typography variant="subtitle1">Order {index + 1}:</Typography>
+                <Typography variant="subtitle1" sx={{ fontWeight: 600 }} >Order {index + 1}:</Typography>
                 <List sx={{ listStyleType: 'none' }}>
                   {order.products.map(product => {
                     const matchedProduct = allProducts.find(p => p._id === product.productId)
                     return (
-                      <ListItem key={product._id} sx={{ border: '1px solid #ccc', borderRadius: '4px', padding: '8px', marginBottom: '4px' }}>
-                        {product.quantity} x {matchedProduct?.title} - €{matchedProduct?.price}
+                      <ListItem key={product._id}
+                        sx={{
+                          border: '1px solid #ccc',
+                          borderRadius: '4px',
+                          padding: '8px',
+                          marginBottom: '4px'
+                        }}
+                      >
+                        <ListItemAvatar>
+                          <Avatar alt={matchedProduct?.title} src={matchedProduct?.image} />
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary={`${matchedProduct?.title}`}
+                          secondary={
+                            <Box>
+                              <Typography variant="body2">Price: €{matchedProduct?.price}</Typography>
+                              <Typography variant="body2">Category: {matchedProduct?.categoryId.name}</Typography>
+                              <Typography variant="body2">Quantity: {product.quantity}</Typography>
+                            </Box>}
+                        />
                       </ListItem>
                     )
                   }
