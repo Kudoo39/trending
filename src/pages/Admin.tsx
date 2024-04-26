@@ -17,6 +17,8 @@ import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button/Button'
 import BorderColorIcon from '@mui/icons-material/BorderColor'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
+import CancelIcon from '@mui/icons-material/Cancel'
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import { fetchUsersAsync } from '../redux/slices/userSlice'
 import UpdateProduct from '../components/product/UpdateProduct'
 import DeleteProduct from '../components/product/DeleteProduct'
@@ -117,6 +119,7 @@ const Admin = () => {
                 <StyledTableCell align="right">Name</StyledTableCell>
                 <StyledTableCell align="right">Email</StyledTableCell>
                 <StyledTableCell align="right">Role</StyledTableCell>
+                <StyledTableCell align="right">Active</StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -129,6 +132,7 @@ const Admin = () => {
                   <StyledTableCell align="right">{user.firstname} {user.lastname}</StyledTableCell>
                   <StyledTableCell align="right">{user.email}</StyledTableCell>
                   <StyledTableCell align="right">{user.role}</StyledTableCell>
+                  <StyledTableCell align="right">{user.banStatus ? <CancelIcon/> : <CheckCircleIcon /> }</StyledTableCell>
                 </StyledTableRow>
               ))}
             </TableBody>

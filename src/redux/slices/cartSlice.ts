@@ -6,6 +6,7 @@ import { CartType, OrderProductsType, ProductType, UpdateQuantity } from '../../
 import { cartEndpoints } from '../../config/config'
 
 const cart = JSON.parse(localStorage.getItem('cart') || '[]')
+const token = localStorage.getItem('token')
 
 const url = cartEndpoints.carts
 
@@ -26,7 +27,11 @@ const initialState: InitialState = {
 export const addOrderByUserId = createAsyncThunk('addOrderByUserId',
   async ({ userId, orders }: { userId: string; orders: OrderProductsType }) => {
     try {
-      const response = await axios.post(`${url}/${userId}`, orders)
+      const response = await axios.post(`${url}/${userId}`, orders, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
       toast.success('Order added successfully!', { position: 'bottom-left' })
       return response.data
     } catch (e) {
@@ -38,7 +43,11 @@ export const addOrderByUserId = createAsyncThunk('addOrderByUserId',
 
 export const getOrderByUserId = createAsyncThunk('getOrderByUserId', async (userId: string) => {
   try {
-    const response = await axios.get(`${url}/${userId}`)
+    const response = await axios.get(`${url}/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
     return response.data
   } catch (e) {
     const error = e as AxiosError

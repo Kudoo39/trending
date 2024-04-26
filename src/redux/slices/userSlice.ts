@@ -11,6 +11,7 @@ const realProfileUrl = userEndpoints.profile
 const realProfilePasswordUrl = userEndpoints.profilePassword
 
 const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true'
+const token = localStorage.getItem('token')
 
 type InitialState = {
   user?: User | null
@@ -31,7 +32,11 @@ export const fetchUsersAsync = createAsyncThunk(
   'fetchUsersAsync',
   async () => {
     try {
-      const response = await axios.get<User[]>(realUserUrl)
+      const response = await axios.get<User[]>(realUserUrl, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
       return response.data
     } catch (e) {
       const error = e as AxiosError
@@ -52,11 +57,11 @@ export const registerUserAsync = createAsyncThunk('registerUserAsync', async (us
   }
 })
 
-export const authenticateUserAsync = createAsyncThunk('authenticateUserAsync', async (token: string) => {
+export const authenticateUserAsync = createAsyncThunk('authenticateUserAsync', async (accessToken: string) => {
   try {
     const authentication = await axios.get(realProfileUrl, {
       headers: {
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${accessToken}`
       }
     })
     return authentication.data
@@ -89,7 +94,11 @@ export const updateUserProfileAsync = createAsyncThunk(
   'updateUserProfileAsync',
   async ({ updateUser, userId }: {updateUser: UpdateUserType, userId: string}) => {
     try {
-      const response = await axios.put(`${realUserUrl}/${userId}`, updateUser)
+      const response = await axios.put(`${realUserUrl}/${userId}`, updateUser, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
       toast.success('Profile updated successfully!', { position: 'bottom-left' })
       return response.data
     } catch (e) {
@@ -104,7 +113,11 @@ export const updateUserPasswordAsync = createAsyncThunk(
   'updateUserPasswordAsync',
   async ({ updatePassword }: {updatePassword: UpdatePasswordType }) => {
     try {
-      const response = await axios.patch(`${realProfilePasswordUrl}`, updatePassword)
+      const response = await axios.patch(`${realProfilePasswordUrl}`, updatePassword, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
       toast.success('Password updated successfully!', { position: 'bottom-left' })
       return response.data
     } catch (e) {

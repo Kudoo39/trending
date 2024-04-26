@@ -7,6 +7,7 @@ import { productEndpoints } from '../../config/config'
 import { fetchData } from '../../utils/fetchData'
 
 const realUrl = productEndpoints.products
+const token = localStorage.getItem('token')
 
 type InitialState = {
   products: ProductType[]
@@ -62,7 +63,11 @@ export const fetchProductsCategoryAllAsync = createAsyncThunk(
 
 export const createProductsAsync = createAsyncThunk('createProductsAsync', async (newProduct: ManageProductType) => {
   try {
-    const response = await axios.post(realUrl, newProduct)
+    const response = await axios.post(realUrl, newProduct, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
     toast.success('Product added successfully!', { position: 'bottom-left' })
     return response.data
   } catch (e) {
@@ -76,7 +81,11 @@ export const updateProductAsync = createAsyncThunk(
   'updateProductAsync',
   async ({ updateProduct, productId }: { updateProduct: ManageProductType; productId: string }) => {
     try {
-      const response = await axios.put(`${realUrl}/${productId}`, updateProduct)
+      const response = await axios.put(`${realUrl}/${productId}`, updateProduct, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
       toast.success('Product updated successfully!', { position: 'bottom-left' })
       return response.data
     } catch (e) {
@@ -89,7 +98,11 @@ export const updateProductAsync = createAsyncThunk(
 
 export const deleteProductAsync = createAsyncThunk('deleteProductAsync', async (productId: string) => {
   try {
-    const response = await axios.delete(`${realUrl}/${productId}`)
+    const response = await axios.delete(`${realUrl}/${productId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
     toast.success('Product removed successfully!', { position: 'bottom-left' })
     return response.data
   } catch (e) {
