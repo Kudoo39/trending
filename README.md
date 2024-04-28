@@ -1,6 +1,6 @@
 # Trending Shop
 
-Trending Shop is a web application built with React that provides users with an online shopping experience. It fetches product data from [Platzi Fake Store API](https://fakeapi.platzi.com/) and offers features such as browsing products, adding items to the cart, and managing products.
+Trending Shop is a web application built with React that offers users an immersive online shopping experience. It sources product data from a custom backend API and provides features such as browsing products, managing the shopping cart, and user authentication.
 
 ## Table of Contents
 
@@ -16,14 +16,14 @@ Trending Shop is a web application built with React that provides users with an 
 
 To get started with the Trending Shop project, follow these steps:
 
-1. Clone the repository: `git clone https://github.com/Kudoo39/trending-shop`
-2. Navigate to the project directory: `cd trending-shop`
+1. Clone the repository: `git clone https://github.com/Kudoo39/trending`
+2. Navigate to the project directory: `cd trending`
 3. Install dependencies: `npm install` or `yarn install`
 4. Run the app locally: `npm run start` or `yarn start`
 
 ## Features
 
-- **Browse Products:** Explore a diverse selection of products sourced from Platzi Fake Store API.
+- **Browse Products:** Explore a diverse selection of products sourced.
 - **Product Details:** Access comprehensive information about each product, including name, price, description, and image.
 - **Shopping Cart Management:** Add products to the shopping cart and easily manage cart items.
 - **User Authentication:** Securely login and register accounts to access personalized features.
@@ -42,81 +42,92 @@ To get started with the Trending Shop project, follow these steps:
 ## Project Structure
 
 ```
-📦
-├─ .eslintrc.js
-├─ .gitignore
-├─ .vscode
-│  └─ settings.json
-├─ README.md
-├─ package.json
-├─ public
-│  ├─ index.html
-│  ├─ robots.txt
-│  └─ shop.svg
-├─ src
-│  ├─ App.tsx
-│  ├─ assets
-│  │  ├─ icons
-│  │  │  └─ shop.svg
-│  │  └─ images
-│  │     ├─ background.jpg
-│  │     ├─ cart_demo.png
-│  │     ├─ default_image.jpg
-│  │     ├─ homepage_demo.png
-│  │     ├─ login_demo.png
-│  │     ├─ products_demo.png
-│  │     └─ responsive_demo.png
-│  ├─ components
-│  │  ├─ Categories.tsx
-│  │  ├─ Footer.tsx
-│  │  ├─ Nav.tsx
-│  │  ├─ ScrollUpButton.tsx
-│  │  ├─ SortPrice.tsx
-│  │  ├─ auth
-│  │  │  ├─ DemoAdminAccount.tsx
-│  │  │  └─ DemoUserAccount.tsx
-│  │  └─ product
-│  │     ├─ CreateProduct.tsx
-│  │     ├─ DeleteProduct.tsx
-│  │     └─ UpdateProduct.tsx
-│  ├─ index.css
-│  ├─ index.tsx
-│  ├─ misc
-│  │  └─ type.ts
-│  ├─ pages
-│  │  ├─ Cart.tsx
-│  │  ├─ Home.tsx
-│  │  ├─ Login.tsx
-│  │  ├─ ProductDetail.tsx
-│  │  ├─ Products.tsx
-│  │  ├─ Profile.tsx
-│  │  └─ Register.tsx
-│  ├─ react-app-env.d.ts
-│  ├─ redux
-│  │  ├─ slices
-│  │  │  ├─ cartSlice.ts
-│  │  │  ├─ categorySlice.ts
-│  │  │  ├─ productSlice.ts
-│  │  │  └─ userSlice.ts
-│  │  └─ store.ts
-│  ├─ reportWebVitals.ts
-│  ├─ setupTests.ts
-│  ├─ test
-│  │  ├─ cart
-│  │  │  └─ cartSlice.test.ts
-│  │  ├─ category
-│  │  │  └─ categorySlice.test.ts
-│  │  ├─ product
-│  │  │  └─ productSlice.test.ts
-│  │  └─ user
-│  │     └─ userSlice.test.ts
-│  ├─ theme.ts
-│  └─ utils
-│     ├─ checkImage.ts
-│     ├─ cleanImage.ts
-│     └─ sort.ts
-├─ tsconfig.json
-└─ yarn.lock
+src
+ ┣ assets
+ ┃ ┣ icons
+ ┃ ┃ ┗ shop.svg
+ ┃ ┗ images
+ ┃ ┃ ┣ background.jpg
+ ┃ ┃ ┣ cart_demo.png
+ ┃ ┃ ┣ default_image.jpg
+ ┃ ┃ ┣ homepage_demo.png
+ ┃ ┃ ┣ login_demo.png
+ ┃ ┃ ┣ no-product-cart.png
+ ┃ ┃ ┣ products_demo.png
+ ┃ ┃ ┗ responsive_demo.png
+ ┣ components
+ ┃ ┣ auth
+ ┃ ┃ ┣ DemoAdminAccount.tsx
+ ┃ ┃ ┗ DemoUserAccount.tsx
+ ┃ ┣ categories
+ ┃ ┃ ┗ Categories.tsx
+ ┃ ┣ footer
+ ┃ ┃ ┗ Footer.tsx
+ ┃ ┣ modeToggle
+ ┃ ┃ ┗ ModeToggle.tsx
+ ┃ ┣ nav
+ ┃ ┃ ┗ Nav.tsx
+ ┃ ┣ product
+ ┃ ┃ ┣ CreateProduct.tsx
+ ┃ ┃ ┣ DeleteProduct.tsx
+ ┃ ┃ ┗ UpdateProduct.tsx
+ ┃ ┣ scrollUpButton
+ ┃ ┃ ┗ ScrollUpButton.tsx
+ ┃ ┣ search
+ ┃ ┃ ┗ Search.tsx
+ ┃ ┣ sortPrice
+ ┃ ┃ ┗ SortPrice.tsx
+ ┃ ┗ user
+ ┃ ┃ ┣ UpdateAvatar.tsx
+ ┃ ┃ ┣ UpdateEmail.tsx
+ ┃ ┃ ┣ UpdatePassword.tsx
+ ┃ ┃ ┗ UpdateUser.tsx
+ ┣ config
+ ┃ ┗ config.ts
+ ┣ misc
+ ┃ ┣ constants.ts
+ ┃ ┗ type.ts
+ ┣ pages
+ ┃ ┣ Admin.tsx
+ ┃ ┣ Cart.tsx
+ ┃ ┣ Home.tsx
+ ┃ ┣ Login.tsx
+ ┃ ┣ ProductDetail.tsx
+ ┃ ┣ Products.tsx
+ ┃ ┣ Profile.tsx
+ ┃ ┗ Register.tsx
+ ┣ redux
+ ┃ ┣ slices
+ ┃ ┃ ┣ cartSlice.ts
+ ┃ ┃ ┣ categorySlice.ts
+ ┃ ┃ ┣ productSlice.ts
+ ┃ ┃ ┗ userSlice.ts
+ ┃ ┗ store.ts
+ ┣ styled-components
+ ┃ ┣ Box.ts
+ ┃ ┣ Button.ts
+ ┃ ┗ Card.ts
+ ┣ test
+ ┃ ┣ cart
+ ┃ ┃ ┗ cartSlice.test.ts
+ ┃ ┣ category
+ ┃ ┃ ┗ categorySlice.test.ts
+ ┃ ┣ product
+ ┃ ┃ ┗ productSlice.test.ts
+ ┃ ┗ user
+ ┃ ┃ ┗ userSlice.test.ts
+ ┣ utils
+ ┃ ┣ checkImage.ts
+ ┃ ┣ cleanImage.ts
+ ┃ ┣ fetchData.ts
+ ┃ ┗ sort.ts
+ ┣ App.tsx
+ ┣ index.css
+ ┣ index.tsx
+ ┣ react-app-env.d.ts
+ ┣ reportWebVitals.ts
+ ┣ setupTests.ts
+ ┗ theme.ts
 ```
 
 ## Testing
@@ -146,3 +157,6 @@ Here are some screenshots of the Trending Shop:
 
 **Responsive Design:**
 ![Responsive](src/assets/images/responsive_demo.png)
+
+**Admin Dashboard:**
+![Admin](src/assets/images/admin_dashboard.png)

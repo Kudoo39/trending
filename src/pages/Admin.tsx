@@ -28,8 +28,10 @@ const Admin = () => {
   const dispatch = useAppDispatch()
   const products = useSelector((state: AppState) => state.products.products)
   const users = useSelector((state: AppState) => state.users.users)
-  const loading = useSelector((state: AppState) => state.products.loading)
-  const error = useSelector((state: AppState) => state.users.error)
+  const productLoading = useSelector((state: AppState) => state.products.loading)
+  const productError = useSelector((state: AppState) => state.products.error)
+  const userLoading = useSelector((state: AppState) => state.users.loading)
+  const userError = useSelector((state: AppState) => state.users.error)
   const [tab, setTab] = useState('products')
 
   useEffect(() => {
@@ -37,7 +39,7 @@ const Admin = () => {
     dispatch(fetchUsersAsync())
   }, [dispatch])
 
-  if (loading) {
+  if (productLoading || userLoading) {
     return (
       <CenteredBox sx={{ height: '100vh' }}>
         <CircularProgress />
@@ -45,8 +47,12 @@ const Admin = () => {
     )
   }
 
-  if (error) {
-    return <Box>Error: {error}</Box>
+  if (productError) {
+    return <Box>Error: {productError}</Box>
+  }
+
+  if (userError) {
+    return <Box>Error: {userError}</Box>
   }
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
