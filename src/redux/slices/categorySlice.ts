@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
-import axios, { AxiosError } from 'axios'
 
 import { ALL_CATEGORY_ID } from '../../misc/constants'
 import { Category } from '../../misc/type'

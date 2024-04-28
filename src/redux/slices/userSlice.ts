@@ -181,6 +181,21 @@ const userSlice = createSlice({
         loading: false
       }
     })
+    builder.addCase(loginUserAsync.pending, (state) => {
+      return {
+        ...state,
+        loading: true,
+        error: null
+      }
+    })
+    builder.addCase(loginUserAsync.rejected, (state, action) => {
+      return {
+        ...state,
+        loading: false,
+        error: action.error.message ?? 'error'
+      }
+    })
+    // registerUserAsync
     builder.addCase(registerUserAsync.fulfilled, (state, action) => {
       return {
         ...state,
