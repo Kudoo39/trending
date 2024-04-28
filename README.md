@@ -24,6 +24,7 @@ To get started with the Trending Shop project, follow these steps:
 ## Features
 
 - **Browse Products:** Explore a diverse selection of products sourced.
+- **Search Functionality:** Find products quickly by searching with keywords or specific terms, improving navigation and user experience.
 - **Product Details:** Access comprehensive information about each product, including name, price, description, and image.
 - **Shopping Cart Management:** Add products to the shopping cart and easily manage cart items.
 - **User Authentication:** Securely login and register accounts to access personalized features.
@@ -137,7 +138,7 @@ src
 
 ## Deployment
 
-Check out the [Live Demo](https://trending-shop.netlify.app/) to experience the E-Commerce Website in action.
+Check out the [Live Demo](https://integrify-trending.netlify.app/) to experience the E-Commerce Website in action.
 
 ## Screenshots
 
