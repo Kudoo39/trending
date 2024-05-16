@@ -2,7 +2,7 @@
 
 Trending Shop is a web application built with React that offers users an immersive online shopping experience. It sources product data from a custom backend API and provides features such as browsing products, managing the shopping cart, and user authentication.
 
-Back-end Repository: [Back-end](https://github.com/Kudoo39/fs17-trending-api)
+Back-end Repository: [Back-end](https://github.com/Kudoo39/trending-api)
 
 ## Table of Contents
 
